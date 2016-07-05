@@ -55,8 +55,8 @@ def guidance_law(k, a_0, a_f, delta_inc, f):
             V_0 * np.cos(beta_0) - f * t0
         )
         r, v = u[:3], u[3:]
-        t_ = v; t_ /= norm(t_)  # TODO: Rewrite
-        w_ = np.cross(r, v); w_ /= norm(w_)  # TODO: Rewrite
+        t_ = v / norm(v)
+        w_ = np.cross(r, v) / norm(np.cross(r, v))
         #n_ = np.cross(t_, w_)
         accel_v = f * (
             np.cos(beta) * t_ +
