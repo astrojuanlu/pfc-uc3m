@@ -15,20 +15,21 @@ import numpy as np
 from poliastro.util import norm
 
 
-def _compute_parameters(k, a_0, a_f, delta_inc):
+def _compute_parameters(k, a_0, a_f, i_0, i_f):
     """Compute parameters of the model.
 
     """
+    delta_inc = abs(i_f - i_0)
     V_0 = np.sqrt(k / a_0)
     V_f = np.sqrt(k / a_f)
     beta_0 = np.arctan2(
         np.sin(np.pi / 2 * delta_inc),
         V_0 / V_f - np.cos(np.pi / 2 * delta_inc)
     )
-    return V_0, beta_0
+    return V_0, beta_0, delta_inc
 
 
-def guidance_law(k, a_0, a_f, delta_inc, f):
+def guidance_law(k, a_0, a_f, i_0, i_f, f):
     """Guidance law from the model.
 
     Parameters
@@ -39,14 +40,16 @@ def guidance_law(k, a_0, a_f, delta_inc, f):
         Initial semimajor axis.
     a_f : float
         Final semimajor axis.
-    delta_inc : float
-        Change in inclination.
+    i_0 : float
+        Initial inclination.
+    i_f : float
+        Final inclination.
     f : float
         Magnitude of constant acceleration
 
     """
     # TODO: Check documentation nomenclature
-    V_0, beta_0 = _compute_parameters(k, a_0, a_f, delta_inc)
+    V_0, beta_0, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
 
     def a_d(t0, u, _):
         # TODO: Is k needed in a general case?
@@ -67,12 +70,12 @@ def guidance_law(k, a_0, a_f, delta_inc, f):
     return a_d
 
 
-def extra_quantities(k, a_0, a_f, delta_inc, f):
+def extra_quantities(k, a_0, a_f, i_0, i_f, f):
     """Extra quantities given by the model.
 
     """
     # Extra interesting quantities
-    V_0, beta_0 = _compute_parameters(k, a_0, a_f, delta_inc)
+    V_0, beta_0, delta_inc = _compute_parameters(k, a_0, a_f, i_0, i_f)
     delta_V = (
         V_0 * np.cos(beta_0) -
         V_0 * np.sin(beta_0) / np.tan(np.pi / 2 * delta_inc + beta_0)
