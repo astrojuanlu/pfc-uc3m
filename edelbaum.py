@@ -51,13 +51,20 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
     # TODO: Check documentation nomenclature
     V_0, beta_0, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
 
-    def a_d(t0, u, _):
+    def a_d(t0, u_, _):
+        r, v = u_[:3], u_[3:]
+
         # TODO: Is k needed in a general case?
         beta = np.arctan2(
             V_0 * np.sin(beta_0),
             V_0 * np.cos(beta_0) - f * t0
-        )
-        r, v = u[:3], u[3:]
+        ) * np.sign(r[0] * (i_f - i_0))  # Change sign of beta with the out-of-plane velocity
+
+        # DEBUG
+        #ss = State.from_vectors(Earth, r * u.km, v * u.km / u.s)
+        #print(beta, ss.inc.to("deg"))
+        # END DEBUG
+
         t_ = v / norm(v)
         w_ = np.cross(r, v) / norm(np.cross(r, v))
         #n_ = np.cross(t_, w_)
