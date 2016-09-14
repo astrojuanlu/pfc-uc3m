@@ -3,7 +3,7 @@ from astropy import units as u
 from numpy.testing import assert_almost_equal
 
 from poliastro.bodies import Earth
-from poliastro.twobody import State
+from poliastro.twobody import Orbit
 
 from poliastro.twobody.propagation import cowell
 
@@ -42,7 +42,7 @@ def test_leo_geo_time_history():
     delta_V, t_f = extra_quantities(k, a_0, a_f, i_0, i_f, f)
 
     # Retrieve r and v from initial orbit
-    s0 = State.circular(Earth, a_0 * u.km - Earth.R, i_0 * u.rad)
+    s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, i_0 * u.rad)
     r0, v0 = s0.rv()
 
     # Propagate orbit
@@ -53,7 +53,7 @@ def test_leo_geo_time_history():
                   ad=edelbaum_accel,
                   nsteps=1000000)
 
-    sf = State.from_vectors(Earth,
+    sf = Orbit.from_vectors(Earth,
                             r * u.km,
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)

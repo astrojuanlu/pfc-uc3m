@@ -3,7 +3,7 @@ import numpy as np
 from astropy import units as u
 
 from poliastro.bodies import Earth
-from poliastro.twobody import State
+from poliastro.twobody import Orbit
 from poliastro.twobody.propagation import cowell
 from poliastro.util import norm
 
@@ -22,8 +22,8 @@ def test_inclination():
         #beta = np.pi / 2 * np.sign(r[1])  # Change at node crossing
 
         # DEBUG
-        ss = State.from_vectors(Earth, r * u.km, v * u.km / u.s)
-        print(beta, ss.inc.to("deg"))
+        #ss = Orbit.from_vectors(Earth, r * u.km, v * u.km / u.s)
+        #print(beta, ss.inc.to("deg"))
         # END DEBUG
 
         w_ = np.cross(r, v) / norm(np.cross(r, v))
@@ -31,7 +31,7 @@ def test_inclination():
         return accel_v
 
     # Retrieve r and v from initial orbit
-    s0 = State.circular(Earth, a_0 * u.km - Earth.R, i_0 * u.rad)
+    s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, i_0 * u.rad)
     r0, v0 = s0.rv()
 
     tf = 150 * s0.period
@@ -44,7 +44,7 @@ def test_inclination():
                   ad=a_d,
                   nsteps=100000)
 
-    sf = State.from_vectors(Earth,
+    sf = Orbit.from_vectors(Earth,
                             r * u.km,
                             v * u.km / u.s,
                             s0.epoch + tf)
