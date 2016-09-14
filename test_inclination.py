@@ -4,6 +4,7 @@ from astropy import units as u
 
 from poliastro.bodies import Earth
 from poliastro.twobody import Orbit
+from poliastro.twobody.decorators import state_from_vector
 from poliastro.twobody.propagation import cowell
 from poliastro.util import norm
 
@@ -15,14 +16,15 @@ def test_inclination():
 
     k = Earth.k.decompose([u.km, u.s]).value
 
-    def a_d(t0, u_, _):
-        r, v = u_[:3], u_[3:]
+    @state_from_vector
+    def a_d(t0, ss):
+        r = ss.r.to(u.km).value
+        v = ss.v.to(u.km / u.s).value
 
         beta = np.pi / 2 * np.sign(r[0])  # Change with out-of-plane velocity
         #beta = np.pi / 2 * np.sign(r[1])  # Change at node crossing
 
         # DEBUG
-        #ss = Orbit.from_vectors(Earth, r * u.km, v * u.km / u.s)
         #print(beta, ss.inc.to("deg"))
         # END DEBUG
 
