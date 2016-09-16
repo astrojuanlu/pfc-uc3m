@@ -63,13 +63,9 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
             V_0 * np.cos(beta_0) - f * t0
         ) * np.sign(r[0] * (i_f - i_0))  # Change sign of beta with the out-of-plane velocity
 
-        # DEBUG
-        #print(beta, ss.inc.to("deg"))
-        # END DEBUG
-
         t_ = v / norm(v)
         w_ = np.cross(r, v) / norm(np.cross(r, v))
-        #n_ = np.cross(t_, w_)
+        # n_ = np.cross(t_, w_)
         accel_v = f * (
             np.cos(beta) * t_ +
             np.sin(beta) * w_
