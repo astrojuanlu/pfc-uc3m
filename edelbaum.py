@@ -93,8 +93,8 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
 
     @state_from_vector
     def a_d(t0, ss):
-        r = ss.r.to(u.km).value
-        v = ss.v.to(u.km / u.s).value
+        r = ss.r.value
+        v = ss.v.value
 
         # Change sign of beta with the out-of-plane velocity
         beta_ = beta(t0, V_0=V_0, f=f, beta_0=beta_0_) * np.sign(r[0] * (i_f - i_0))
