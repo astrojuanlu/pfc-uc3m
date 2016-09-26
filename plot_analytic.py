@@ -4,27 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-def _circular_velocity(k, a):
-    """Compute circular velocity for a given body (k) and semimajor axis (a).
-
-    """
-    return np.sqrt(k / a)
-
-
-def beta_0(V_0, V_f, delta_i_f):
-    """Compute initial yaw angle (β) as a function of the problem parameters."""
-    return np.arctan2(
-        np.sin(np.pi / 2 * delta_i_f),
-        V_0 / V_f - np.cos(np.pi / 2 * delta_i_f)
-    )
-
-
-def beta(t, *, V_0, f, beta_0):
-    """Compute yaw angle (β) as a function of time and the problem parameters.
-
-    """
-    return np.arctan2(V_0 * np.sin(beta_0), V_0 * np.cos(beta_0) - f * t)
+from edelbaum import beta_0, beta, circular_velocity
 
 
 def V(t, *, V_0, f, beta_0):
@@ -54,13 +34,12 @@ def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, i_0=np.radians(28.5), i_f=
     """
     t_domain = np.linspace(0, t_f, num=2000) * 86400  # s
 
-    V_0 = _circular_velocity(k, a_0)
-    V_f = _circular_velocity(k, a_f)
-    delta_i_f = abs(i_f - i_0)
+    V_0 = circular_velocity(k, a_0)
+    V_f = circular_velocity(k, a_f)
 
-    beta_0_ = beta_0(V_0, V_f, delta_i_f)
+    beta_0_ = beta_0(V_0, V_f, i_0, i_f)
 
-    fig1, ax_l1 = plt.subplots()
+    _, ax_l1 = plt.subplots()
     ax_l1.set_xlabel("Time, days")
 
     ax_l1.plot(t_domain / 86400, np.degrees(beta(
@@ -81,7 +60,7 @@ def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, i_0=np.radians(28.5), i_f=
     ), color='k', linestyle='dashed')
     ax_r1.set_ylabel("Semimajor axis, km (thousands)")
 
-    fig, ax_l2 = plt.subplots()
+    _, ax_l2 = plt.subplots()
     ax_l2.set_xlabel("Time, days")
 
     ax_l2.plot(t_domain / 86400, V(

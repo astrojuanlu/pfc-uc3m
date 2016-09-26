@@ -22,13 +22,52 @@ def _compute_parameters(k, a_0, a_f, i_0, i_f):
 
     """
     delta_inc = abs(i_f - i_0)
-    V_0 = np.sqrt(k / a_0)
-    V_f = np.sqrt(k / a_f)
-    beta_0 = np.arctan2(
-        np.sin(np.pi / 2 * delta_inc),
-        V_0 / V_f - np.cos(np.pi / 2 * delta_inc)
+    V_0 = circular_velocity(k, a_0)
+    V_f = circular_velocity(k, a_f)
+    beta_0_ = beta_0(V_0, V_f, i_0, i_f)
+
+    return V_0, beta_0_, delta_inc
+
+
+def circular_velocity(k, a):
+    """Compute circular velocity for a given body (k) and semimajor axis (a).
+
+    """
+    return np.sqrt(k / a)
+
+
+def beta_0(V_0, V_f, i_0, i_f):
+    """Compute initial yaw angle (β) as a function of the problem parameters.
+
+    """
+    delta_i_f = abs(i_f - i_0)
+    return np.arctan2(
+        np.sin(np.pi / 2 * delta_i_f),
+        V_0 / V_f - np.cos(np.pi / 2 * delta_i_f)
     )
-    return V_0, beta_0, delta_inc
+
+
+def beta(t, *, V_0, f, beta_0):
+    """Compute yaw angle (β) as a function of time and the problem parameters.
+
+    """
+    return np.arctan2(V_0 * np.sin(beta_0), V_0 * np.cos(beta_0) - f * t)
+
+
+def delta_V(V_0, beta_0, i_0, i_f):
+    """Compute required increment of velocity.
+
+    """
+    delta_i_f = abs(i_f - i_0)
+    return V_0 * np.cos(beta_0) - V_0 * np.sin(beta_0) / np.tan(np.pi / 2 * delta_i_f + beta_0)
+
+
+def t_f(V_0, f, beta_0, i_0, i_f):
+    """Compute required time of flight.
+
+    """
+    delta_V_ = delta_V(V_0, beta_0, i_0, i_f)
+    return delta_V_ / f
 
 
 def guidance_law(k, a_0, a_f, i_0, i_f, f):
@@ -50,25 +89,22 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
         Magnitude of constant acceleration
 
     """
-    # TODO: Check documentation nomenclature
-    V_0, beta_0, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
+    V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
 
     @state_from_vector
     def a_d(t0, ss):
         r = ss.r.to(u.km).value
         v = ss.v.to(u.km / u.s).value
 
-        beta = np.arctan2(
-            V_0 * np.sin(beta_0),
-            V_0 * np.cos(beta_0) - f * t0
-        ) * np.sign(r[0] * (i_f - i_0))  # Change sign of beta with the out-of-plane velocity
+        # Change sign of beta with the out-of-plane velocity
+        beta_ = beta(t0, V_0=V_0, f=f, beta_0=beta_0_) * np.sign(r[0] * (i_f - i_0))
 
         t_ = v / norm(v)
         w_ = np.cross(r, v) / norm(np.cross(r, v))
         # n_ = np.cross(t_, w_)
         accel_v = f * (
-            np.cos(beta) * t_ +
-            np.sin(beta) * w_
+            np.cos(beta_) * t_ +
+            np.sin(beta_) * w_
         )
         return accel_v
 
@@ -79,12 +115,8 @@ def extra_quantities(k, a_0, a_f, i_0, i_f, f):
     """Extra quantities given by the model.
 
     """
-    # Extra interesting quantities
-    V_0, beta_0, delta_inc = _compute_parameters(k, a_0, a_f, i_0, i_f)
-    delta_V = (
-        V_0 * np.cos(beta_0) -
-        V_0 * np.sin(beta_0) / np.tan(np.pi / 2 * delta_inc + beta_0)
-    )
-    t_f = delta_V / f
+    V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
+    delta_V_ = delta_V(V_0, beta_0_, i_0, i_f)
+    t_f_ = t_f(V_0, f, beta_0_, i_0, i_f)
 
-    return delta_V, t_f
+    return delta_V_, t_f_
