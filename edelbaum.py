@@ -11,8 +11,6 @@ References
 """
 import numpy as np
 
-from astropy import units as u
-
 from poliastro.twobody.decorators import state_from_vector
 from poliastro.util import norm
 
