@@ -22,7 +22,7 @@ def test_leo_geo_time_and_delta_v():
 
     k = Earth.k.decompose([u.km, u.s]).value
 
-    expected_t_f = 191.26295  # s
+    expected_t_f = 191.26295  # days
     expected_delta_V = 5.78378  # km / s
 
     delta_V, t_f = extra_quantities(k, a_0, a_f, i_0, i_f, f)
