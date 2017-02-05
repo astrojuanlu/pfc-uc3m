@@ -12,7 +12,7 @@ References
 import numpy as np
 
 from poliastro.twobody.decorators import state_from_vector
-from poliastro.util import norm
+from poliastro.util import norm, circular_velocity
 
 
 def _compute_parameters(k, a_0, a_f, i_0, i_f):
@@ -25,13 +25,6 @@ def _compute_parameters(k, a_0, a_f, i_0, i_f):
     beta_0_ = beta_0(V_0, V_f, i_0, i_f)
 
     return V_0, beta_0_, delta_inc
-
-
-def circular_velocity(k, a):
-    """Compute circular velocity for a given body (k) and semimajor axis (a).
-
-    """
-    return np.sqrt(k / a)
 
 
 def beta_0(V_0, V_f, i_0, i_f):
@@ -58,14 +51,6 @@ def delta_V(V_0, beta_0, i_0, i_f):
     """
     delta_i_f = abs(i_f - i_0)
     return V_0 * np.cos(beta_0) - V_0 * np.sin(beta_0) / np.tan(np.pi / 2 * delta_i_f + beta_0)
-
-
-def t_f(V_0, f, beta_0, i_0, i_f):
-    """Compute required time of flight.
-
-    """
-    delta_V_ = delta_V(V_0, beta_0, i_0, i_f)
-    return delta_V_ / f
 
 
 def guidance_law(k, a_0, a_f, i_0, i_f, f):
@@ -115,6 +100,6 @@ def extra_quantities(k, a_0, a_f, i_0, i_f, f):
     """
     V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
     delta_V_ = delta_V(V_0, beta_0_, i_0, i_f)
-    t_f_ = t_f(V_0, f, beta_0_, i_0, i_f)
+    t_f_ = delta_V_ / f
 
     return delta_V_, t_f_

@@ -4,7 +4,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from edelbaum import beta_0, beta, circular_velocity
+from poliastro.util import circular_velocity
+
+from edelbaum import beta_0, beta
 
 
 def V(t, *, V_0, f, beta_0):

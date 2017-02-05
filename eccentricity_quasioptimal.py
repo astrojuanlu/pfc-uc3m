@@ -10,14 +10,7 @@ References
 import numpy as np
 
 from poliastro.twobody.decorators import state_from_vector
-from poliastro.util import norm
-
-
-def circular_velocity(k, a):
-    """Compute circular velocity for a given body (k) and semimajor axis (a).
-
-    """
-    return np.sqrt(k / a)
+from poliastro.util import norm, circular_velocity
 
 
 def guidance_law(f):
