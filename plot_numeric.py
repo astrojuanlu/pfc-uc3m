@@ -14,19 +14,6 @@ from poliastro.twobody.rv import RVState
 from edelbaum import guidance_law, extra_quantities
 
 
-def plot_edelbaum_case(i_0):
-    a_0 = 7000.0  # km
-    a_f = 42166.0  # km
-    i_f = 0.0  # deg
-    f = 3.5e-7  # km / s2
-
-    t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, i_0, i_f, f)
-    a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
-    _plot_quantities(t_domain, a_values, inc_values, v_values)
-
-    plt.show()
-
-
 def _compute_results_array(a_0, a_f, i_0, i_f, f):
     k = Earth.k.decompose([u.km, u.s]).value
 
@@ -39,18 +26,27 @@ def _compute_results_array(a_0, a_f, i_0, i_f, f):
 
     results = []
 
-    def callback(t, u_):
-        results.append([t] + list(u_))
-        return 0
+    def callback(pb):
+        # https://pypi.python.org/pypi/tqdm#hooks-and-callbacks
+        last_t = 0.0
+
+        def inner(t, u_):
+            nonlocal last_t
+            results.append([t] + list(u_))
+            pb.update(t - last_t)
+            last_t = t
+
+        return inner
 
     # Propagate orbit
-    r, v = cowell(k,
-                  r0.to(u.km).value,
-                  v0.to(u.km / u.s).value,
-                  t_f,
-                  ad=edelbaum_accel,
-                  callback=callback,
-                  nsteps=1000000)
+    from tqdm import tqdm
+    with tqdm(total=t_f, unit="s") as progress:
+        cowell(
+            k, r0.to(u.km).value, v0.to(u.km / u.s).value, t_f,
+            ad=edelbaum_accel,
+            callback=callback(progress),
+            nsteps=1000000
+        )
 
     results_np = np.array(results)  # ~70 k rows, 7 columns, 3 MB in memory
 
@@ -77,6 +73,7 @@ def _extract_arrays(t_domain, r_vectors, v_vectors):
 
 
 def _plot_quantities(t_domain, a_values, inc_values, v_values):
+    # TODO: Plotting 70k rows is extremely slow, consider subsampling
     _, ax_r1 = plt.subplots()
     ax_r1.set_xlabel("Time, days")
 
@@ -94,6 +91,19 @@ def _plot_quantities(t_domain, a_values, inc_values, v_values):
     ax_r2.set_ylabel("Inclination, degrees")
 
     return ax_r1, ax_r1, ax_l2, ax_r2
+
+
+def plot_edelbaum_case(i_0):
+    a_0 = 7000.0  # km
+    a_f = 42166.0  # km
+    i_f = 0.0  # deg
+    f = 3.5e-7  # km / s2
+
+    t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, i_0, i_f, f)
+    a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
+    _plot_quantities(t_domain, a_values, inc_values, v_values)
+
+    plt.show()
 
 
 if __name__ == '__main__':
