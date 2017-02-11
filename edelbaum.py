@@ -15,23 +15,23 @@ from poliastro.twobody.decorators import state_from_vector
 from poliastro.util import norm, circular_velocity
 
 
-def _compute_parameters(k, a_0, a_f, i_0, i_f):
+def _compute_parameters(k, a_0, a_f, inc_0, i_f):
     """Compute parameters of the model.
 
     """
-    delta_inc = abs(i_f - i_0)
+    delta_inc = abs(i_f - inc_0)
     V_0 = circular_velocity(k, a_0)
     V_f = circular_velocity(k, a_f)
-    beta_0_ = beta_0(V_0, V_f, i_0, i_f)
+    beta_0_ = beta_0(V_0, V_f, inc_0, i_f)
 
     return V_0, beta_0_, delta_inc
 
 
-def beta_0(V_0, V_f, i_0, i_f):
+def beta_0(V_0, V_f, inc_0, i_f):
     """Compute initial yaw angle (β) as a function of the problem parameters.
 
     """
-    delta_i_f = abs(i_f - i_0)
+    delta_i_f = abs(i_f - inc_0)
     return np.arctan2(
         np.sin(np.pi / 2 * delta_i_f),
         V_0 / V_f - np.cos(np.pi / 2 * delta_i_f)
@@ -45,15 +45,15 @@ def beta(t, *, V_0, f, beta_0):
     return np.arctan2(V_0 * np.sin(beta_0), V_0 * np.cos(beta_0) - f * t)
 
 
-def delta_V(V_0, beta_0, i_0, i_f):
+def delta_V(V_0, beta_0, inc_0, i_f):
     """Compute required increment of velocity.
 
     """
-    delta_i_f = abs(i_f - i_0)
+    delta_i_f = abs(i_f - inc_0)
     return V_0 * np.cos(beta_0) - V_0 * np.sin(beta_0) / np.tan(np.pi / 2 * delta_i_f + beta_0)
 
 
-def guidance_law(k, a_0, a_f, i_0, i_f, f):
+def guidance_law(k, a_0, a_f, inc_0, i_f, f):
     """Guidance law from the model.
 
     Parameters
@@ -64,7 +64,7 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
         Initial semimajor axis.
     a_f : float
         Final semimajor axis.
-    i_0 : float
+    inc_0 : float
         Initial inclination.
     i_f : float
         Final inclination.
@@ -72,7 +72,7 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
         Magnitude of constant acceleration
 
     """
-    V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
+    V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, inc_0, i_f)
 
     @state_from_vector
     def a_d(t0, ss):
@@ -80,7 +80,7 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
         v = ss.v.value
 
         # Change sign of beta with the out-of-plane velocity
-        beta_ = beta(t0, V_0=V_0, f=f, beta_0=beta_0_) * np.sign(r[0] * (i_f - i_0))
+        beta_ = beta(t0, V_0=V_0, f=f, beta_0=beta_0_) * np.sign(r[0] * (i_f - inc_0))
 
         t_ = v / norm(v)
         w_ = np.cross(r, v) / norm(np.cross(r, v))
@@ -94,12 +94,12 @@ def guidance_law(k, a_0, a_f, i_0, i_f, f):
     return a_d
 
 
-def extra_quantities(k, a_0, a_f, i_0, i_f, f):
+def extra_quantities(k, a_0, a_f, inc_0, i_f, f):
     """Extra quantities given by the model.
 
     """
-    V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, i_0, i_f)
-    delta_V_ = delta_V(V_0, beta_0_, i_0, i_f)
+    V_0, beta_0_, _ = _compute_parameters(k, a_0, a_f, inc_0, i_f)
+    delta_V_ = delta_V(V_0, beta_0_, inc_0, i_f)
     t_f_ = delta_V_ / f
 
     return delta_V_, t_f_

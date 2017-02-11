@@ -45,19 +45,19 @@ def guidance_law(f):
     return a_d
 
 
-def delta_V(V_0, e_0, e_f):
+def delta_V(V_0, ecc_0, ecc_f):
     """Compute required increment of velocity.
 
     """
-    return 2 / 3 * V_0 * np.abs(np.arcsin(e_0) - np.arcsin(e_f))
+    return 2 / 3 * V_0 * np.abs(np.arcsin(ecc_0) - np.arcsin(ecc_f))
 
 
-def extra_quantities(k, a, e_0, e_f, f):
+def extra_quantities(k, a, ecc_0, ecc_f, f):
     """Extra quantities given by the model.
 
     """
     V_0 = circular_velocity(k, a)
-    delta_V_ = delta_V(V_0, e_0, e_f)
+    delta_V_ = delta_V(V_0, ecc_0, ecc_f)
     t_f_ = delta_V_ / f
 
     return delta_V_, t_f_

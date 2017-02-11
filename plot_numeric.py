@@ -14,14 +14,14 @@ from poliastro.twobody.rv import RVState
 from edelbaum import guidance_law, extra_quantities
 
 
-def _compute_results_array(a_0, a_f, i_0, i_f, f):
+def _compute_results_array(a_0, a_f, inc_0, i_f, f):
     k = Earth.k.decompose([u.km, u.s]).value
 
-    edelbaum_accel = guidance_law(k, a_0, a_f, i_0, i_f, f)
-    _, t_f = extra_quantities(k, a_0, a_f, i_0, i_f, f)
+    edelbaum_accel = guidance_law(k, a_0, a_f, inc_0, i_f, f)
+    _, t_f = extra_quantities(k, a_0, a_f, inc_0, i_f, f)
 
     # Retrieve r and v from initial orbit
-    s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, i_0 * u.rad)
+    s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, inc_0 * u.rad)
     r0, v0 = s0.rv()
 
     results = []
@@ -93,13 +93,13 @@ def _plot_quantities(t_domain, a_values, inc_values, v_values):
     return ax_r1, ax_r1, ax_l2, ax_r2
 
 
-def plot_edelbaum_case(i_0):
+def plot_edelbaum_case(inc_0):
     a_0 = 7000.0  # km
     a_f = 42166.0  # km
     i_f = 0.0  # deg
     f = 3.5e-7  # km / s2
 
-    t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, i_0, i_f, f)
+    t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, inc_0, i_f, f)
     a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
     _plot_quantities(t_domain, a_values, inc_values, v_values)
 

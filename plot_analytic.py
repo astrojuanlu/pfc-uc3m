@@ -30,7 +30,7 @@ def delta_inc(t, *, V_0, f, beta_0):
     return 2 / np.pi * (np.arctan((f * t - V_0 * np.cos(beta_0)) / (V_0 * np.sin(beta_0))) + np.pi / 2 - beta_0)
 
 
-def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, i_0=np.radians(28.5), i_f=0.0, f=3.5e-7, t_f=200):
+def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, inc_0=np.radians(28.5), i_f=0.0, f=3.5e-7, t_f=200):
     """Plot interesting quantities.
 
     """
@@ -39,7 +39,7 @@ def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, i_0=np.radians(28.5), i_f=
     V_0 = circular_velocity(k, a_0)
     V_f = circular_velocity(k, a_f)
 
-    beta_0_ = beta_0(V_0, V_f, i_0, i_f)
+    beta_0_ = beta_0(V_0, V_f, inc_0, i_f)
 
     _, ax_l1 = plt.subplots()
     ax_l1.set_xlabel("Time, days")
@@ -74,7 +74,7 @@ def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, i_0=np.radians(28.5), i_f=
     ax_l2.set_ylabel("Velocity, km/s")
 
     ax_r2 = ax_l2.twinx()
-    ax_r2.plot(t_domain / 86400, np.degrees(i_0 - delta_inc(
+    ax_r2.plot(t_domain / 86400, np.degrees(inc_0 - delta_inc(
         t_domain,
         V_0=V_0,
         f=f,
@@ -86,21 +86,21 @@ def plot_problem(k=398600.0, a_0=7000.0, a_f=42166.0, i_0=np.radians(28.5), i_f=
 
 
 if __name__ == '__main__':
-    ax_l1, ax_r1, ax_l2, ax_r2 = plot_problem(i_0=np.radians(28.5))
+    ax_l1, ax_r1, ax_l2, ax_r2 = plot_problem(inc_0=np.radians(28.5))
     ax_l1.set_ylim(20, 75)
     ax_r1.set_ylim(0, 45)
     ax_l2.set_ylim(3, 8)
     ax_r2.set_ylim(0, 30)
     plt.show()
 
-    ax_l1, ax_r1, ax_l2, ax_r2 = plot_problem(i_0=np.radians(90), t_f=330)
+    ax_l1, ax_r1, ax_l2, ax_r2 = plot_problem(inc_0=np.radians(90), t_f=330)
     ax_l1.set_ylim(10, 150)
     ax_r1.set_ylim(0, 200)
     ax_l2.set_ylim(1, 8)
     ax_r2.set_ylim(0, 90)
     plt.show()
 
-    ax_l1, ax_r1, ax_l2, ax_r2 = plot_problem(i_0=2, t_f=350)
+    ax_l1, ax_r1, ax_l2, ax_r2 = plot_problem(inc_0=2, t_f=350)
     ax_l1.set_ylim(0, 180)
     ax_r1.set_ylim(0, 500)
     ax_l2.set_ylim(0, 8)

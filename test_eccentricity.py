@@ -12,8 +12,8 @@ from eccentricity_quasioptimal import guidance_law, extra_quantities
 
 def test_sso_disposal_time_and_delta_v():
     a_0 = Earth.R.to(u.km).value + 900  # km
-    e_0 = 0.0
-    e_f = 0.1245  # Reverse-engineered from results
+    ecc_0 = 0.0
+    ecc_f = 0.1245  # Reverse-engineered from results
     f = 2.4e-7  # km / s2, assumed constant
 
     k = Earth.k.decompose([u.km, u.s]).value
@@ -21,7 +21,7 @@ def test_sso_disposal_time_and_delta_v():
     expected_t_f = 29.697  # days, reverse-engineered
     expected_delta_V = 0.6158  # km / s, lower than actual result
 
-    delta_V, t_f = extra_quantities(k, a_0, e_0, e_f, f)
+    delta_V, t_f = extra_quantities(k, a_0, ecc_0, ecc_f, f)
 
     assert_almost_equal(delta_V, expected_delta_V, decimal=4)
     assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
@@ -29,15 +29,15 @@ def test_sso_disposal_time_and_delta_v():
 
 def test_sso_disposal_numerical():
     a_0 = Earth.R.to(u.km).value + 900  # km
-    e_0 = 0.0
-    e_f = 0.1245  # Reverse-engineered from results
+    ecc_0 = 0.0
+    ecc_f = 0.1245  # Reverse-engineered from results
     f = 2.4e-7  # km / s2, assumed constant
 
     k = Earth.k.decompose([u.km, u.s]).value
 
     optimal_accel = guidance_law(f)
 
-    _, t_f = extra_quantities(k, a_0, e_0, e_f, f)
+    _, t_f = extra_quantities(k, a_0, ecc_0, ecc_f, f)
 
     # Retrieve r and v from initial orbit
     s0 = Orbit.circular(Earth, 900 * u.km)
@@ -56,4 +56,4 @@ def test_sso_disposal_numerical():
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)
 
-    assert_almost_equal(sf.ecc.value, e_f, decimal=4)
+    assert_almost_equal(sf.ecc.value, ecc_f, decimal=4)
