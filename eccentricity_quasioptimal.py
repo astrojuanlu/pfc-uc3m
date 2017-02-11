@@ -25,7 +25,6 @@ def guidance_law(f):
         Magnitude of constant acceleration
 
     """
-
     @state_from_vector
     def a_d(t0, ss):
         r = ss.r.value
@@ -53,11 +52,11 @@ def delta_V(V_0, e_0, e_f):
     return 2 / 3 * V_0 * np.abs(np.arcsin(e_0) - np.arcsin(e_f))
 
 
-def extra_quantities(k, a_0, e_0, e_f, f):
+def extra_quantities(k, a, e_0, e_f, f):
     """Extra quantities given by the model.
 
     """
-    V_0 = circular_velocity(k, a_0)
+    V_0 = circular_velocity(k, a)
     delta_V_ = delta_V(V_0, e_0, e_f)
     t_f_ = delta_V_ / f
 

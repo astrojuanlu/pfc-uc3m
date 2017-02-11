@@ -27,12 +27,12 @@ def test_leo_geo_time_and_delta_v():
 
     delta_V, t_f = extra_quantities(k, a_0, a_f, i_0, i_f, f)
 
-    assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
     assert_almost_equal(delta_V, expected_delta_V, decimal=4)
+    assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
 
 
 @pytest.mark.parametrize("i_0", [np.radians(28.5), np.radians(90.0)])
-def test_edelbaum_case(i_0):
+def test_leo_geo_numerical(i_0):
     a_0 = 7000.0  # km
     a_f = 42166.0  # km
     i_f = 0.0  # deg

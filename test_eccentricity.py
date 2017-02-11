@@ -23,11 +23,11 @@ def test_sso_disposal_time_and_delta_v():
 
     delta_V, t_f = extra_quantities(k, a_0, e_0, e_f, f)
 
-    assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
     assert_almost_equal(delta_V, expected_delta_V, decimal=4)
+    assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
 
 
-def test_ruggiero_case():
+def test_sso_disposal_numerical():
     a_0 = Earth.R.to(u.km).value + 900  # km
     e_0 = 0.0
     e_f = 0.1245  # Reverse-engineered from results
