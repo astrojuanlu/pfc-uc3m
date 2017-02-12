@@ -13,6 +13,8 @@ from poliastro.twobody.rv import RVState
 
 from edelbaum import guidance_law, extra_quantities
 
+from util import ProgressResultsCallback
+
 
 def _compute_results_array(a_0, a_f, inc_0, i_f, f):
     k = Earth.k.decompose([u.km, u.s]).value
@@ -24,37 +26,16 @@ def _compute_results_array(a_0, a_f, inc_0, i_f, f):
     s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, inc_0 * u.rad)
     r0, v0 = s0.rv()
 
-    results = []
-
-    def callback(pb):
-        # https://pypi.python.org/pypi/tqdm#hooks-and-callbacks
-        last_t = 0.0
-
-        def inner(t, u_):
-            nonlocal last_t
-            results.append([t] + list(u_))
-            pb.update(t - last_t)
-            last_t = t
-
-        return inner
-
     # Propagate orbit
-    from tqdm import tqdm
-    with tqdm(total=t_f, unit="s") as progress:
+    with ProgressResultsCallback(t_f) as res:
         cowell(
             k, r0.to(u.km).value, v0.to(u.km / u.s).value, t_f,
             ad=edelbaum_accel,
-            callback=callback(progress),
+            callback=res,
             nsteps=1000000
         )
 
-    results_np = np.array(results)  # ~70 k rows, 7 columns, 3 MB in memory
-
-    t_domain = results_np[:, 0]
-    r_vectors = results_np[:, 1:4]
-    v_vectors = results_np[:, 4:]
-
-    return t_domain, r_vectors, v_vectors
+    return res.get_results()  # ~70 k rows, 7 columns, 3 MB in memory
 
 
 def _extract_arrays(t_domain, r_vectors, v_vectors):
