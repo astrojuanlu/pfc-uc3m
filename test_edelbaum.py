@@ -1,7 +1,7 @@
 import pytest
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_allclose
 
 from astropy import units as u
 
@@ -12,37 +12,33 @@ from poliastro.twobody.propagation import cowell
 
 from edelbaum import guidance_law, extra_quantities
 
+# Problem data
+f = 3.5e-7  # km / s2
+
+a_0 = 7000.0  # km
+a_f = 42166.0  # km
+inc_f = 0.0  # rad
+
+k = Earth.k.decompose([u.km, u.s]).value
+
 
 def test_leo_geo_time_and_delta_v():
-    a_0 = 7000.0  # km
-    a_f = 42166.0  # km
     inc_0 = (28.5 * u.deg).to(u.rad).value  # rad
-    i_f = 0.0  # rad
-    f = 3.5e-7  # km / s2
-
-    k = Earth.k.decompose([u.km, u.s]).value
 
     expected_t_f = 191.26295  # days
     expected_delta_V = 5.78378  # km / s
 
-    delta_V, t_f = extra_quantities(k, a_0, a_f, inc_0, i_f, f)
+    delta_V, t_f = extra_quantities(k, a_0, a_f, inc_0, inc_f, f)
 
-    assert_almost_equal(delta_V, expected_delta_V, decimal=4)
-    assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
+    assert_allclose(delta_V, expected_delta_V, rtol=1e-5)
+    assert_allclose(t_f / 86400, expected_t_f, rtol=1e-5)
 
 
 @pytest.mark.parametrize("inc_0", [np.radians(28.5), np.radians(90.0)])
 def test_leo_geo_numerical(inc_0):
-    a_0 = 7000.0  # km
-    a_f = 42166.0  # km
-    i_f = 0.0  # deg
-    f = 3.5e-7  # km / s2
+    edelbaum_accel = guidance_law(k, a_0, a_f, inc_0, inc_f, f)
 
-    k = Earth.k.decompose([u.km, u.s]).value
-
-    edelbaum_accel = guidance_law(k, a_0, a_f, inc_0, i_f, f)
-
-    _, t_f = extra_quantities(k, a_0, a_f, inc_0, i_f, f)
+    _, t_f = extra_quantities(k, a_0, a_f, inc_0, inc_f, f)
 
     # Retrieve r and v from initial orbit
     s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, inc_0 * u.rad)
@@ -61,6 +57,6 @@ def test_leo_geo_numerical(inc_0):
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)
 
-    assert_almost_equal(sf.a.to(u.km).value, a_f, decimal=0)
-    assert_almost_equal(sf.ecc.value, 0.0, decimal=2)
-    assert_almost_equal(sf.inc.to(u.rad).value, i_f, decimal=2)
+    assert_allclose(sf.a.to(u.km).value, a_f, rtol=1e-5)
+    assert_allclose(sf.ecc.value, 0.0, atol=1e-2)
+    assert_allclose(sf.inc.to(u.rad).value, inc_f, atol=1e-3)

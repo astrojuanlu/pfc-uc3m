@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_allclose
 
 from astropy import units as u
 
@@ -36,8 +36,8 @@ def test_geo_cases_beta_and_delta_v(ecc_0, inc_f, expected_beta, expected_delta_
 
     delta_V, beta, _ = extra_quantities(k, a, ecc_0, ecc_f, inc_0, inc_f, argp, f)
 
-    assert_almost_equal(delta_V, expected_delta_V, decimal=1)
-    assert_almost_equal(beta, expected_beta, decimal=2)
+    assert_allclose(delta_V, expected_delta_V, rtol=1e-2)
+    assert_allclose(beta, expected_beta, rtol=1e-2)
 
 
 @pytest.mark.skip
@@ -70,4 +70,4 @@ def test_geo_cases_numerical():
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)
 
-    assert_almost_equal(sf.ecc.value, ecc_f, decimal=4)
+    assert_allclose(sf.ecc.value, ecc_f)

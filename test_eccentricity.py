@@ -1,4 +1,4 @@
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_allclose
 
 from astropy import units as u
 
@@ -23,8 +23,8 @@ def test_sso_disposal_time_and_delta_v():
 
     delta_V, t_f = extra_quantities(k, a_0, ecc_0, ecc_f, f)
 
-    assert_almost_equal(delta_V, expected_delta_V, decimal=4)
-    assert_almost_equal(t_f / 86400, expected_t_f, decimal=2)
+    assert_allclose(delta_V, expected_delta_V, rtol=1e-4)
+    assert_allclose(t_f / 86400, expected_t_f, rtol=1e-4)
 
 
 def test_sso_disposal_numerical():
@@ -56,4 +56,4 @@ def test_sso_disposal_numerical():
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)
 
-    assert_almost_equal(sf.ecc.value, ecc_f, decimal=4)
+    assert_allclose(sf.ecc.value, ecc_f, rtol=1e-4)
