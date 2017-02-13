@@ -34,7 +34,7 @@ def guidance_law(ecc_0, ecc_f, inc_0, inc_f, argp, f):
         Magnitude of constant acceleration.
 
     """
-    beta_ = beta(ecc_0, ecc_f, inc_0, inc_f, argp)
+    beta_0_ = beta(ecc_0, ecc_f, inc_0, inc_f, argp)
 
     @state_from_vector
     def a_d(t0, ss):
@@ -42,14 +42,18 @@ def guidance_law(ecc_0, ecc_f, inc_0, inc_f, argp, f):
         v = ss.v.value
         nu = ss.nu.value
 
-        alpha_ = nu
+        # TODO: The direction must change depending on the sign of Δe
+        alpha_ = nu - np.pi
+        # "The sign of ß reverses at minor axis crossings"
+        beta_ = beta_0_ * np.sign(np.cos(nu))
 
         r_ = r / norm(r)
         w_ = np.cross(r, v) / norm(np.cross(r, v))
         s_ = np.cross(w_, r_)
         accel_v = f * (
-            np.cos(alpha_) * s_ +
-            np.sin(alpha_) * r_
+            np.cos(beta_) * np.sin(alpha_) * r_ +
+            np.cos(beta_) * np.cos(alpha_) * s_ +
+            np.sin(beta_) * w_
         )
         return accel_v
 
