@@ -12,3 +12,4 @@ dependencies:
   - poliastro=0.6
   - tqdm
   - pytest
+  - pytest-xdist
