@@ -1,0 +1,63 @@
+\section{Introduction} \label{introduction}
+
+\subsection{Space propulsion}
+
+\subsubsection{History}
+
+\subsubsection{Methods}
+
+\subsection{The perturbed two-body problem}
+
+\subsection{Trajectory optimization}
+
+\subsection{Numerical techniques}
+
+\subsection{Orbital mechanics software}
+
+\subsubsection{Python} \label{sec:python}
+
+\begin{figure}
+\begin{lstinputlisting}[language=Python]{examples/algorithm.txt}
+\end{lstinputlisting}
+\caption{Fragment of BMW-Vallado algorithm for Lambert's problem in Python. Notice its resemblance to pseudocode.}
+\label{fig:python}
+\end{figure}
+
+The Python programming language was started by Guido van Rossum in 1989 as a successor to the ABC language, and v1.0 was released in 1994\footnote{http://python-history.blogspot.com.es/2009/01/brief-timeline-of-python.html}. It is therefore not new, and in fact it predates the Java language, first released in 1996. On the other hand, Python first uses for scientific purposes appeared as early as 1995, with the creation of a special interest group on numerical arrays\cite{millman2011python}. However, in recent times the ecosystem has greatly improved, with the application of Open Development principles, the increasing interest and involvement of private companies and the generous funds given to projects like IPython\cite{perez2007ipython} and Jupyter. Nowadays, it is one of the most used languages in fields like Astronomy\cite{momcheva2015software} and small-to-medium Data Science, and heavily trusted for teaching undergraduate Computer Science in top universities\cite{guo2014python}. In figure~\ref{fig:python} we can see a fragment of one of the Bate-Mueller-White algorithm to solve Lambert's problem implemented in Python.
+
+One of the most important differences between Python and compiled languages like Fortran or C is its dynamic typing nature. The variety of type systems across has traditionally been a major source of debate among programmers, and in fact some studies suggest that there is "a small but significant relationship between language class and defects"\cite{ray2014quality}. Languages featuring dynamic typing, as it is the case with Python, are often easier to write and read but more difficult to debug, as there are no guarantees about the types of the arguments, and have worse performance. While there is an increasing interest in developing type inference systems (see for instance the Julia and Scala languages), these are extremely difficult to set up for languages like Python \cite{cannon2005localized}.
+
+\subsubsection{poliastro}
+
+The code developed for this Master thesis is based on \verb|poliastro|, an open source, pure Python library for Astrodynamics and Orbital Mechanics focused on interplanetary applications and released under the MIT license\cite{cano2017poliastro060}. To overcome the limitations mentioned in \ref{sec:python} regarding the performance of the Python programming language, \verb|poliastro| relies on \verb|numba|, an open source library which can infer types for array-oriented and math-heavy Python code and generate optimized machine instructions using the LLVM compiler infrastructure\cite{numba}.
+
+numba works by inferring the types of the variables of a Python function and refining them in several stages until it generates assembly code for the desired platform. In figure~\ref{fig:numba} we see a small fragment of the code that implements the Stumpff functions in poliastro along with its so-called Numba Intermediate Representation, which is the first stage of the optimization process.
+
+\begin{figure}
+\begin{lstinputlisting}[language=Python]{examples/annotations.txt}
+\end{lstinputlisting}
+\caption{Example of numba annotation along corresponding line of Python code.}
+\label{fig:numba}
+\end{figure}
+
+In \cite{cano2017icatt} detailed benchmarks were conducted to compare the performance of core Astrodynamics algorithms written in Python as featured in \verb|poliastro| and in Fortran. The tests were performed in a virtualized CentOS machine to avoid interferences from the outside world and provide homogeneous results. The results are summarized in table~\ref{table:results}.
+
+\begin{table*}
+    \centering
+    \begin{tabular}{ c|c c c c c }
+          \textbf{Version} & \textbf{Minimum} & \textbf{Maximum} & \textbf{Median} & \textbf{Relative} & \textbf{IQR} \\
+    \hline
+        \textbf{Intel ifort}, \verb|-O2| & 594620.8 & 654121.4 & 623536.2 & \textbf{1.0} & 25861.2 \\ 
+        \textbf{GNU gfortran}, \verb|-O2| & 358478.2 & 505127.0 & 454613.6 & \textbf{0.729} & 68265.5 \\ 
+        \textbf{poliastro}, numba & 197610.9 & 206153.2 & 203615.8 & \textbf{0.327} & 3296.5 \\ 
+        \textbf{poliastro}, pure Python & 3502.7 & 3703.0 & 3639.6 & \textbf{0.006} & 65.6 \\ 
+    \end{tabular}
+    \caption{Benchmarking results}
+    \label{table:results}
+\end{table*}
+
+On the other hand, \verb|poliastro| relies on well-tested, community-backed libraries for low level astronomical tasks, such as Astropy\cite{robitaille2013astropy} and jplephem. Astropy provides several utilities for handling astronomical times and performing reference frame conversions and also allows the user to introduce quantities directly with its physical units, improving the usability of the API\todo{explain what API is somewhere} and reducing the probability of unit errors. jplephem, on the other hand, presents a Python layer to interact with the JPL ephemeris files to compute the position and velocities of the celestial bodies with high precision.
+
+\subsection{Contribution of this Master thesis}
+
+\clearpage

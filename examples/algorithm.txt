@@ -1,0 +1,16 @@
+while count < numiter:
+    y = norm_r0 + norm_r + A * (psi * c3(psi) - 1) / c2(psi)**.5
+    # ...
+    xi = np.sqrt(y / c2(psi))
+    tof_new = (xi**3 * c3(psi) + A * np.sqrt(y)) / np.sqrt(k)
+
+    if np.abs((tof_new - tof) / tof) < rtol:
+        # Convergence check
+        break
+    else:
+        count += 1
+        if tof_new <= tof:  # Bisection check
+            psi_low = psi
+        else:
+            psi_up = psi
+        psi = (psi_up + psi_low) / 2

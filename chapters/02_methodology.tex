@@ -1,0 +1,61 @@
+\section{Methodology} \label{methodology}
+
+\subsection{Cases in study} \label{cases}
+
+For this study we have considered a variety of low-thrust control
+laws that have been developed in the last 60 years. In particular,
+we have focused our attention in fixed-thrust maneuvers \todo{we have
+made the assumption that...?}: as the most common case for
+low-thrust systems is constant acceleration \todo{[citation needed]}, this 
+effectively takes the variation of mass of the spacecraft out of 
+consideration.
+
+On the other hand, to keep the implementations as simple 
+as possible \todo{in fact, we focused on the simplest equations} we 
+have selected those references that make no assumptions about the 
+natural orbital perturbations and do not take into account the time 
+spent in eclipse by the spacecraft \todo{rewrite, take from Kechichian introduction}.
+
+Lastly, for the implementation and discussion of 
+results we have taken out the guidance laws that do not have 
+accompanying validation cases available in the literature \todo{or rather: that we haven't found them}. These criteria left us with the following selection of guidance laws for low-thrust trajectories:
+
+\todo{Replace name of authors by proper references}
+
+\begin{itemize}
+\item Optimal transfer between circular coplanar orbits $a_0 \rightarrow a_f$ \cite{edelbaum1961propulsion,burt1967space}
+\item Optimal transfer between circular inclined orbits $(a_0, i_0) \rightarrow (a_f, i_f), e = 0$ \cite{edelbaum1961propulsion,kechichian1997reformulation}
+\item Quasi-optimal eccentricity-only change $e_0 \rightarrow e_f$ \cite{pollard1997simplified}
+\item Simultaneous eccentricity and inclination change $(e_0, i_0) \rightarrow (e_f, i_f), a_0 = a_f$ \cite{pollard2000simplified}
+\item Argument of periapsis adjustment $\omega_0 \rightarrow \omega_f$ \cite{pollard1998evaluation}
+\end{itemize}
+
+\subsection{Planar maneuvers} \label{metplanar}
+
+Let us first focus on the planar maneuvers, those that only affect the semimajor axis $a$, eccentricity $e$ and argument of periapsis $\omega$ of the orbit. While some of them can be obtained as particular cases of more complicated guidance laws studied in \ref{metnonplanar}, for the sake of simplicity and clarity of exposition we decided to consider them separately.
+
+\subsubsection{Semimajor axis change} \label{metsma}
+
+In this section we discuss several strategies to perform a transfer between two coplanar, near-circular orbits, and we select the tangential one among the other solutions for practical considerations.
+
+Burt studied the secular changes in the classical orbital elements originated by several thrust programs assuming that the perturbing forces are "sensibly constant over one orbital period" and also "small enough to produce a negligible variation" of each element during that period \cite{burt1967space}. For the semimajor axis in particular, and using results previously obtained by King-Hele, he considers two guidance laws: applying thrust in a direction that is within the orbital plane and perpendicular to the radius vector ($f_2$) \todo{use some clear convention for reference frames somewhere} and along the direction of the velocity ($f_T$).
+
+\begin{figure}%[h]
+  \centering
+  \resizebox{1.0\textwidth}{!}
+  {
+  \input{figures/burt_difference.pgf}
+  }
+  \caption{Difference of $\frac{da}{dt}$ between tangential ($f_T$) and perpendicular ($f_2$) thrust.}
+  \label{fig:burtdiff}
+\end{figure}
+
+Kechichian directly assumes only tangential and out-of-plane thrust acceleration to reformulate Edelbaum's theory, therefore setting the normal component to zero. However, in his original analysis Edelbaum already noticed that the tangential program is not necessarily optimal\footnote{It would have been extremely interesting to study in detail how this result relates to the cases studied by Burt and King-Hele. However, we have been unable to obtain Lawden's paper in any physical or electronic form, so we have been deprived of his valuable derivations.}:
+
+\begin{displayquote}
+It is demonstrated in (17) [Lawden 1958, AN] that the optimum thrust direction for escape with low thrust is halfway between the tangent to the orbit and the normal to the radius vector. This result is also largely applicable to transfer between circular orbits. For the purposes of this report, the difference between this program and tangential thrust can be considered negligible.
+\end{displayquote}
+
+\subsection{Non planar maneuvers} \label{metnonplanar}
+
+\clearpage
