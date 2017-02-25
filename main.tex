@@ -1,9 +1,10 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper]{book}
 
 %% Language and font encodings
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{textcomp}  % Some characters like €
 
 %% Sets page size and margins
 %\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
@@ -18,15 +19,23 @@
 \usepackage{listings}  % Code listings
 \usepackage{csquotes}  % Quotes
 \usepackage{pgf}  % matplotlib figures
+\usepackage{booktabs}  % pandas tables
+\usepackage{longtable}  % long pandas tables
+\usepackage{lscape}  % sideways tables
+\usepackage{epigraph}  % Nice epigraphs
+\usepackage{times}  % Use Times as default serif font
 
 %% Other redefinitions
-\usepackage{times}  % Use Times as default serif font
+\newcommand{\celsius}{{\textdegree}C}
 \renewcommand{\ttdefault}{pcr}  % Use Courier in listings
 \lstset{
 	basicstyle=\ttfamily\footnotesize,
     breaklines=true,
     extendedchars=true,
 }  % Reduce font size in listings
+\setlength{\epigraphrule}{0pt}
+\setlength{\epigraphwidth}{.6\textwidth}
+\renewcommand{\textflush}{flushepinormal}
 
 \title{Study of analytical solutions for low-thrust trajectories}
 \author{Juan Luis Cano Rodríguez}
@@ -34,10 +43,12 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-Your abstract.
-\end{abstract}
+% Undefined in book
+%\begin{abstract}
+%Your abstract.
+%\end{abstract}
 
+\include{chapters/acknowledgements}
 \include{chapters/01_introduction}
 \include{chapters/02_methodology}
 \include{chapters/03_results}
@@ -46,7 +57,8 @@ Your abstract.
 \appendix
 
 \include{appendices/A_reference-frames}
-\include{appendices/B_source-code}
+\include{appendices/B_methods}
+\include{appendices/C_source-code}
 
 \bibliographystyle{apalike}
 \bibliography{main,software}
