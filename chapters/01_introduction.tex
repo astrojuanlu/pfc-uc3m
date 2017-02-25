@@ -23,7 +23,7 @@ In his most revolutionary idea, he proposed that humans could hope to fly to ver
 % http://english.stackexchange.com/a/301270/20057
 
 \begin{figure}[h]
-\[\Delta v = v_\text{e} \ln \frac {m_0} {m_f}\]
+\[\Delta v = v_e \ln \frac{m_0}{m_f}\]
 \caption{The Tsiolkovsky equation.}
 \end{figure}
 
@@ -34,6 +34,8 @@ At the same time, important practical advances were being made in the field of r
 To this day, chemical propulsion (whether using liquid fuel as pioneered by Goddard and later used by the Saturn V or solid fuel as already used by the Chinese in the 13th century) continues to be the only way to escape the gravitational well of the Earth. What is not so well known is that many of the people involved in the early development of astrodynamics and astronautics in the 20th century shared a common interest in an alternative method: electric propulsion. Goddard had already reflected on the use of "electrons moving with the velocity of light" as a method of propulsion as early as 1906, and Tsiolkovski wrote in 1911 about the use of electricity "to produce a large velocity for the particles ejected from a rocket device" \cite{choueiri2004history}. Oberth even envisioned electric propulsion as a real possibility for attitude control in his 1929 book \textit{Ways to Spaceflight} and already predicted its mass saving capabilities.
 
 Despite all this enthusiasm, however, there were far too many obstacles at the time to make it a reality: first of all, the understanding of atomic physics was still in its infancy, with the nature of the electrons still unclear and the discovery of the proton not happening until 1920, hindering rigorous studies. Besides, electric propulsion was definitely not useful to attain orbital velocity, and on the other hand it requires a much more complex mathematical analysis (we will expand on these aspects in \ref{sec:propulsion}). For the following fifteen years after the publication of Oberth's book all the focus shifted away from electrical propulsion, until the tremendous advances regarding the production of intense ion currents during the forties brought back the debate about its feasibility \cite{choueiri2004history}.
+
+Electric spacecraft propulsion was not the only idea that appeared those years that fell dormant because it was well ahead of its time. In 1925, twenty five years after Pyotr N. Lebedev demonstrated the pressure of light, Friedrich A. Zander published a technical paper titled \textit{Problems of flight by jet propulsion: interplanetary flights} where he discussed several challenges associated with space travel, including re-entry into the Earth atmosphere, and first analyzed with great detail the use of radiation pressure as a means of propulsion, an idea suggested years earlier by Tsiolkovski. Zander proposed the use of extremely thin aluminum mirrors and computed the required surface and admissible stresses, laying the first bricks of beam-powered propulsion. The first formal technology and design effort for a solar sail did not begin until  1976 and to this day there are no flight proven solutions.
 
 In 1950 George F. Forbes presented the element that was missing for a complete mathematical analysis, the study of low-thrust trajectories, by showing for the first time that in some cases they were more efficient than the high-thrust counterparts in his Masters thesis \textit{The trajectory of a powered rocket in space}. This, and the contribution of Lyman S. Spitzer, who in his 1952 paper \textit{Interplanetary Travel Between Satellite Orbits} suggested that for an ion propulsion system to be technically useful an acceleration of three centimeters per square second would be enough ("sufficient to attain a velocity of $15~\text{km/sec}$ in two months" \cite{spitzer1952interplanetary}), provided the building blocks for the electrical propulsion to have the attention it deserved.
 
@@ -49,11 +51,13 @@ We can define propulsion in a broad sense as the act of changing the motion of a
 
 \textbf{Chemical propulsion} uses the chemical potential stored in the propellants, usually of reducing (fuel) and oxidizing nature, that is released in a high-pressure combustion reaction between the two. The reaction produces a flow of hot gases (between 2500 and 4100~\celsius) that can be accelerated in a convergent-divergent (or De Laval) nozzle to achieve supersonic velocities (1800 to 4300 m/s). In this case, therefore, the power source and the propellants are the same elements. Chemical propulsion systems can be themselves subdivided according to the state of the propellants: \textit{solid propellant rocket motors} use a solid material that contains all the chemical elements that are needed for complete burning, whereas \textit{liquid propellant rocket engines} use liquid propellants that are fed under pressure from separate tanks into a thrust chamber, whey they react.
 
-\textbf{Electric propulsion} comprises a family of systems that use an electric power source which is physically separate from the mechanism that produces the thrust itself. In \textit{electrothermal propulsion} the propellant is heated by heated resistors or electric arcs and then expanded to supersonic velocity as it is done in chemical propulsion systems. On the other hand, \textit{ion an plasma drives} use electric and magnetic fields to accelerate ions or highly ionized plasmas, therefore not applying thermodynamic expansion to the propellant.
+\textbf{Electric propulsion} comprises a family of systems that use an electric power source which is physically separate from the mechanism that produces the thrust itself. In \textit{electro-thermal propulsion} the propellant is heated by heated resistors or electric arcs and then expanded to supersonic velocity as it is done in chemical propulsion systems. On the other hand, \textit{ion and plasma drives} use electric and magnetic fields to accelerate ions or highly ionized plasmas, therefore not applying thermodynamic expansion to the propellant.
 
 \textbf{Beam-powered propulsion} or directed energy propulsion refers to a broad family of methods, some of them experimental or speculative, that use an external power source to propel the spacecraft. Some of them concentrate beamed energy to heat a stored propellant, such as solar thermal rockets, while others use passive devices that take advantage of the radiation pressure, such as solar or laser-based sails.
 
 Lastly, \textbf{nuclear propulsion} is a proposed spacecraft propulsion technology that delivers heat to a working fluid by means of a nuclear reaction, either by atomic fission or fusion. While they would be extremely useful for shortening interplanetary travel time and the first are at least feasible with today's technology, to date no nuclear thermal rocket has flown and they present too many technological and environmental problems, so we won't discuss more about them.
+
+To this day, no optimal spacecraft propulsion method exists and when designing an space mission one or more of them must be chosen according to the desired requirements and the available technology. Figure \ref{fig:propulsionchart} displays a graphical summary of performance characteristics of several spacecraft propulsion methods according to their energy source. As mentioned before, the only method that has enough power to escape the gravitational field of the Earth is chemical propulsion, whether in the form of solid rockets or liquid engines: the rest of the methods provide an acceleration (or, equivalently, thrust) that is orders of magnitude below and that does not reach the required thrust-to-drag ratio to lift the spacecraft to the atmosphere.
 
 \begin{figure}
 \centering
@@ -62,17 +66,27 @@ Lastly, \textbf{nuclear propulsion} is a proposed spacecraft propulsion technolo
 \label{fig:propulsionchart}
 \end{figure}
 
-Figure \ref{fig:propulsionchart} displays a graphical summary of performance characteristics of several spacecraft propulsion methods according to their energy source.
+However, chemical propulsion is not without limitations. If we recover the Tsiolkovski equation
 
-\todo[inline]{Concepts: specific impulse, effective exhaust velocity. Influence of the Tsiolkovski equation as said in the Encyclopedia article, mass of the spacecraft. Patel, chapter 23. Sutton 2001, chapter 19.}
+\begin{equation}
+\Delta v = v_e \ln \frac{m_0}{m_f}
+\end{equation}
 
-\todo[inline]{translate, expand, recover references}
+we notice that the obtained increment in velocity $\Delta v$ is directly proportional to the \textit{effective exhaust velocity} $v_e$ and that increases with the \textit{mass fraction} $m_0 / m_f$. Effective exhaust velocity can be also written as
 
-Sin embargo, aunque estos sistemas son más eficientes en términos de la masa de propulsante consumida para una trayectoria dada, debido a la limitación de potencia eléctrica disponible a bordo del satélite, las tecnologías existentes producen empujes mucho menores que los disponibles con cohetes químicos y por tanto operan durante períodos de tiempo más dilatados. Este hecho hace que las trayectorias de vehículos propulsados por sistemas de bajo empuje (low thrust) no puedan ser estudiadas como arcos balísticos, y por tanto, requieran un tratamiento analítico mucho más complicado; en particular, existen infinitas trayectorias posibles entre dos puntos (tantas como leyes de guiado se puedan aplicar) [Woodcock, 2002].
+\[
+v_e = I_{sp} g_0 = \frac{T}{\dot{m}}
+\]
+
+where $I_{sp}$ is the specific impulse, $g_0$ is the standard gravity, $T$ is the exerted thrust and $\dot{m}$ is the mass flow rate. Therefore, $v_e$ is a measure of the \textit{efficiency} of the propulsion system. If our effective exhaust velocity (or, equivalently, specific impulse) is low, we will need a higher mass fraction to gain the required velocity increment. Notice that this equation is ideal and does not take into account loses due to atmospheric drag or the gravitational forces.
+
+While the maximum thrust achievable with chemical propulsion is more than $10^6$ newton, the specific impulse using current technology is in the range of 250 to 500 seconds approximately. This is a comparatively low value for the efficiency and creates the need of carrying high amounts of propellant mass, both for expendable rockets that raise the payload into orbit and also for attitude control and orbit maintenance systems for the operation of the spacecraft \cite{curran1993nasa}.
+
+Fortunately, the specific impulse for ion thrusters and plasma drives can be one or two orders of magnitude higher, therefore leading to much lower propellant mass requirements. However, although these systems are more efficient in terms of the consumed mass for a given trajectory, due to the limitation of electrical power on board the spacecraft the available thrust is significantly lower than chemical rockets. As a result, low-thrust systems in general and electric propulsion systems in particular must be used during long periods of time that can range between weeks and months.
+
+This sole fact renders the mathematical treatment of low-thrust trajectories much more complicated: on the one hand they cannot be treated as ballistic arcs anymore since there will be a permanent force acting on the spacecraft in addition of the gravitational field, and on the other hand there will be an infinite number of possible trajectories between two points and fixed times \cite{woodcock2002benefits}. In the following sections we analyze the consequences of these two facts.
 
 \section{The perturbed two-body problem}
-
-\todo[inline]{Derive equations}
 
 \section{Trajectory optimization}
 
@@ -108,6 +122,8 @@ It is a tradeoff method between indirect and direct method
 
 \subsection{Python} \label{sec:python}
 
+The Python programming language was started by Guido van Rossum in 1989 as a successor to the ABC language, and v1.0 was released in 1994\footnote{http://python-history.blogspot.com.es/2009/01/brief-timeline-of-python.html}. It is therefore not new, and in fact it predates the Java language, first released in 1996. On the other hand, Python first uses for scientific purposes appeared as early as 1995, with the creation of a special interest group on numerical arrays \cite{millman2011python}. However, in recent times the ecosystem has greatly improved, with the application of Open Development principles, the increasing interest and involvement of private companies and the generous funds given to projects like IPython \cite{perez2007ipython} and Jupyter. Nowadays, it is one of the most used languages in fields like Astronomy \cite{momcheva2015software} and small-to-medium Data Science, and heavily trusted for teaching undergraduate Computer Science in top universities \cite{guo2014python}. In figure~\ref{fig:python} we can see a fragment of one of the Bate-Mueller-White algorithm to solve Lambert's problem implemented in Python.
+
 \begin{figure}
 \begin{lstinputlisting}[language=Python]{examples/algorithm.txt}
 \end{lstinputlisting}
@@ -115,13 +131,11 @@ It is a tradeoff method between indirect and direct method
 \label{fig:python}
 \end{figure}
 
-The Python programming language was started by Guido van Rossum in 1989 as a successor to the ABC language, and v1.0 was released in 1994\footnote{http://python-history.blogspot.com.es/2009/01/brief-timeline-of-python.html}. It is therefore not new, and in fact it predates the Java language, first released in 1996. On the other hand, Python first uses for scientific purposes appeared as early as 1995, with the creation of a special interest group on numerical arrays\cite{millman2011python}. However, in recent times the ecosystem has greatly improved, with the application of Open Development principles, the increasing interest and involvement of private companies and the generous funds given to projects like IPython\cite{perez2007ipython} and Jupyter. Nowadays, it is one of the most used languages in fields like Astronomy\cite{momcheva2015software} and small-to-medium Data Science, and heavily trusted for teaching undergraduate Computer Science in top universities\cite{guo2014python}. In figure~\ref{fig:python} we can see a fragment of one of the Bate-Mueller-White algorithm to solve Lambert's problem implemented in Python.
-
-One of the most important differences between Python and compiled languages like Fortran or C is its dynamic typing nature. The variety of type systems across has traditionally been a major source of debate among programmers, and in fact some studies suggest that there is "a small but significant relationship between language class and defects"\cite{ray2014quality}. Languages featuring dynamic typing, as it is the case with Python, are often easier to write and read but more difficult to debug, as there are no guarantees about the types of the arguments, and have worse performance. While there is an increasing interest in developing type inference systems (see for instance the Julia and Scala languages), these are extremely difficult to set up for languages like Python \cite{cannon2005localized}.
+One of the most important differences between Python and compiled languages like Fortran or C is its dynamic typing nature. The variety of type systems across has traditionally been a major source of debate among programmers, and in fact some studies suggest that there is "a small but significant relationship between language class and defects" \cite{ray2014quality}. Languages featuring dynamic typing, as it is the case with Python, are often easier to write and read but more difficult to debug, as there are no guarantees about the types of the arguments, and have worse performance. While there is an increasing interest in developing type inference systems (see for instance the Julia and Scala languages), these are extremely difficult to set up for languages like Python \cite{cannon2005localized}.
 
 \subsection{poliastro}
 
-The code developed for this Master thesis is based on \verb|poliastro|, an open source, pure Python library for Astrodynamics and Orbital Mechanics focused on interplanetary applications and released under the MIT license\cite{cano2017poliastro060}. To overcome the limitations mentioned in \ref{sec:python} regarding the performance of the Python programming language, \verb|poliastro| relies on \verb|numba|, an open source library which can infer types for array-oriented and math-heavy Python code and generate optimized machine instructions using the LLVM compiler infrastructure\cite{numba}.
+The code developed for this Master thesis is based on \verb|poliastro|, an open source, pure Python library for Astrodynamics and Orbital Mechanics focused on interplanetary applications and released under the MIT license\cite{cano2017poliastro060}. To overcome the limitations mentioned in \ref{sec:python} regarding the performance of the Python programming language, \verb|poliastro| relies on \verb|numba|, an open source library which can infer types for array-oriented and math-heavy Python code and generate optimized machine instructions using the LLVM compiler infrastructure \cite{numba}.
 
 numba works by inferring the types of the variables of a Python function and refining them in several stages until it generates assembly code for the desired platform. In figure~\ref{fig:numba} we see a small fragment of the code that implements the Stumpff functions in poliastro along with its so-called Numba Intermediate Representation, which is the first stage of the optimization process.
 
