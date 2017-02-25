@@ -25,6 +25,14 @@
 \usepackage{epigraph}  % Nice epigraphs
 \usepackage{times}  % Use Times as default serif font
 
+%% Mathematical commands
+% http://tex.stackexchange.com/q/44545/2488
+\renewcommand{\vec}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\diff}{\ensuremath{\operatorname{d}\!}}
+\newcommand{\deriv}[3][]{\ensuremath{\frac{\diff^{#1} #2}{\diff #3^{#1}}}}
+\newcommand{\ta}{\ensuremath{\theta}}  % True Anomaly
+\newcommand{\arglat}{\ensuremath{(\omega + \ta)}}
+
 %% Other redefinitions
 \newcommand{\celsius}{{\textdegree}C}
 \renewcommand{\ttdefault}{pcr}  % Use Courier in listings

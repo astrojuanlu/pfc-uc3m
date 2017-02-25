@@ -88,13 +88,45 @@ This sole fact renders the mathematical treatment of low-thrust trajectories muc
 
 \section{The perturbed two-body problem}
 
+The equation of the perturbed relative motion of two bodies is \cite{battin1999introduction}
+
+\begin{equation}
+\deriv[2]{\vec{r}}{t} + \frac{\mu}{r^3} \vec{r} = \vec{a}_d
+\label{eq:twobody}
+\end{equation}
+
+% {Battin 84, 94, 10.3}
+
+where $\vec{r}$ is the vector position of the target mass with respect to its attractor and $\vec{a}_d$ is the non-Keplerian or perturbation acceleration. This equation arises when analyzing the n-body problem, in which case the perturbation acceleration is due to the gravitational attraction of the other $n - 2$ bodies, but $\vec{a}_d$ can be more general and include the action of a low-thrust device. This action can be controlled in the case of electric propulsion systems or be subject to external factors in the case of beam-powered propulsion systems such as the radiation pressure from the Sun.
+
+The most straightforward method for determining the position $\vec{r}(t)$ and velocity $\vec{r}(t)$ in the case of a nonzero perturbing acceleration if a direct numerical integration of \ref{eq:twobody} in rectangular coordinates, known as Cowell's method \cite{battin1999introduction}. However, this equation is nonlinear, becomes singular when the distance between the two bodies becomes zero and its solution is unstable, so a number of regularizations and transformations have been proposed in the literature \cite{bau2013new}.
+
+Another approach to integrate the equations of motion is to use a set of orbital elements as dependent variables and then apply variational techniques. This technique, called \textit{variation of parameters}, assumes that we can use the solution of the unperturbed system to represent the complete solution \cite{vallado2001fundamentals}. The advantage is that most orbital elements stay constant for the case of pure Keplerian motion, and depending on the nature of the perturbing forces the effects on the orbit can be circumscribed to a small subset of orbital elements. Furthermore, we can easily separate the short period, long period and secular effects on each of those elements. Two forms of variational equations exist: the Lagrangian form assumes the perturbation function can be derived from a potential, and the Gaussian form removes this constraint. The former is useful when analyzing conservative perturbations, like the effects of the non-spherical shape of the Earth, whereas the latter is more general and works for arbitrary perturbation accelerations.
+
+There are many forms of the Gauss planetary equations, depending on the element set in use and the reference frame chosen for projecting the perturbation acceleration components. We reproduce here the form derived by \cite{battin1999introduction}, which uses classical orbital elements $(a, e, i, \Omega, \omega, M)$ and polar coordinates $(f_r, f_{\ta}, f_h)$:
+
+\begin{align}
+\deriv{a}{t} & = \frac{2 a^2}{h} \left( e \sin{\ta} f_r + \frac{p}{r} f_{\ta} \right) \\
+\deriv{e}{t} & = \frac{1}{h} \left( p \sin{\ta} f_r + \left( \left( p + r \right) \cos{\ta} + r e \right) f_{\theta} \right) \\
+\deriv{i}{t} & = \frac{r \cos{\arglat}}{h} f_h \\
+\deriv{\Omega}{t} & = \frac{r \sin{\arglat}}{h \sin{i}} f_h \\
+\deriv{\omega}{t} & = \frac{1}{he} \left( -p \cos{\ta} f_r + \left( p + r \right) \sin{\ta} f_{\theta} \right) - \frac{r \sin{\arglat} \cos{i}}{h \sin{i}} f_h \\
+\deriv{M}{t} & = n + \frac{b}{ahe} \left( \left( p \cos{\ta} - 2 re \right) f_r - \left( p + r \right) \sin{\ta} f_{\ta} \right) \\
+\end{align}
+
+Where $a$ is the semimajor axis, $e$ the eccentricity, $i$ the inclination, $\Omega$ the right ascension of the ascending node, $\omega$ the argument of periapsis, $\ta$ the true anomaly and $M$ the mean anomaly. The three components of the disturbing force are mutually orthogonal: $f_r$ points outwards along the position vector, $f_h$ is perpendicular to the plane of the orbit and $f_{\ta}$ completes the trihedron.
+
+Notice that for small values of the eccentricity or the inclination the variation of some parameters over one orbit can be very large, and for circular or equatorial orbits the equations become singular \cite{vallado2001fundamentals}. In these cases, a different set of orbital elements would have to be chosen. A recent development in this regard can be found in \cite{bau2013new}.
+
+With these equations, a known perturbation acceleration or guidance law and an appropriate numerical integration scheme we would be able to integrate the equations of motion and compute the variation of the dependent variables in time, apart from the numerical errors of the method and the available precision of the computer. However if we have full control of $\vec{a}_d$ we are now in charge of selecting the appropriate control law to minimize the travel time, the fuel consumption or any other cost function of our desire, subject to the constraints of our problem. This is explained in the following section.
+
 \section{Trajectory optimization}
 
-\section{Numerical techniques}
+The need to optimize the trajectory of spacecraft comes from the stringent mass fraction constraints discussed in \ref{sec:propulsion} and predates the introduction of low-thrust systems. One example is the design of the Venus-Earth-Earth Gravity Assist (VEEGA) trajectory for the Galileo spacecraft, which took advantage of three flybys to achieve a high escape velocity while leaving enough propellant to perform the Jupiter orbit insertion and a tour around its moons \cite{damario1989galileo}. This mission had the additional constraint of visiting two asteroids, so the design of its trajectory involved checking closest approaches with several thousand objects and reoptimizing for each candidate.
 
-\todo[inline]{Expand}
+In any case, apart from this cases of parametric optimization, the use of continuous thrust devices imposes the need of modeling and determining the full time history of the thrust magnitude and direction, effectively becoming an optimal control problem \cite{conway2010spacecraft}. There are several numerical optimization methods for solving these kind of problems, generally divided into two families:
 
-http://www.maia.ub.es/dsg/wsem/documents/low-thrust.pdf
+\todo[inline]{Expand everything after this TODO. Methods better explained in \cite{conway2010spacecraft} and \cite{betts1998survey}.}
 
 \textbf{Direct Method}
 Solve the Two-point Boundary-value Problem.
@@ -107,13 +139,11 @@ optimization by discretization.
 Advantage: Easy to converge than indirect method, some other optimization parameters can be added
 Disadvantage: Time consuming, the solution is not smooth 
 
-\textbf{Hybrid Method}
-Neglect the transversality condition, adjust the costates by using parameter optimization method (SQP)
-It is a tradeoff method between indirect and direct method
+There exist also \textit{hybrid methods} that combine the previous two and try to bring the advantages of both of them.
+
+In some very restricted cases there are also analytical solutions: very low-thrust, circular orbits. \cite{lawden1963optimal} says that analytical solutions are nice because we gain a real understanding of the problem and help us being effective in using numerical techniques. This is the scope of our work, as will be explained in \ref{sec:contribution}.
 
 \section{Orbital mechanics software}
-
-\todo[inline]{Better explained in Conway}
 
 \begin{itemize}
 \item Orekit https://www.orekit.org/static/apidocs/org/orekit/forces/maneuvers/ConstantThrustManeuver.html
@@ -162,9 +192,9 @@ In \cite{cano2016icatt} detailed benchmarks were conducted to compare the perfor
     \label{table:results}
 \end{table*}
 
-On the other hand, \verb|poliastro| relies on well-tested, community-backed libraries for low level astronomical tasks, such as Astropy\cite{robitaille2013astropy} and jplephem. Astropy provides several utilities for handling astronomical times and performing reference frame conversions and also allows the user to introduce quantities directly with its physical units, improving the usability of the API\todo{explain what API is somewhere} and reducing the probability of unit errors. jplephem, on the other hand, presents a Python layer to interact with the JPL ephemeris files to compute the position and velocities of the celestial bodies with high precision.
+On the other hand, \verb|poliastro| relies on well-tested, community-backed libraries for low level astronomical tasks, such as Astropy\cite{robitaille2013astropy} and jplephem. Astropy provides several utilities for handling astronomical times and performing reference frame conversions and also allows the user to introduce quantities directly with its physical units, improving the usability of the API \todo{explain what API is somewhere} and reducing the probability of unit errors. jplephem, on the other hand, presents a Python layer to interact with the JPL ephemeris files to compute the position and velocities of the celestial bodies with high precision.
 
-\section{Contribution of this Master thesis}
+\section{Contribution of this Master thesis} \label{sec:contribution}
 
 \todo[inline]{translate, complete}
 
