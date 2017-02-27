@@ -44,7 +44,8 @@ def test_sso_disposal_numerical(ecc_0, ecc_f):
     _, t_f = extra_quantities(k, a_0, ecc_0, ecc_f, f)
 
     # Retrieve r and v from initial orbit
-    s0 = Orbit.circular(Earth, 900 * u.km)
+    s0 = Orbit.from_classical(Earth, a_0 * u.km, ecc_0 * u.one,
+                              0 * u.deg, 0 * u.deg, 0 * u.deg, 0 * u.deg)
     r0, v0 = s0.rv()
 
     optimal_accel = guidance_law(s0, ecc_f, f)
@@ -62,4 +63,4 @@ def test_sso_disposal_numerical(ecc_0, ecc_f):
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)
 
-    assert_allclose(sf.ecc.value, ecc_f, rtol=1e-4, atol=1e-10)
+    assert_allclose(sf.ecc.value, ecc_f, rtol=1e-4, atol=1e-4)

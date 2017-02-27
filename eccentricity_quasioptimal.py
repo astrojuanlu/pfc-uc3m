@@ -32,7 +32,7 @@ def guidance_law(ss_0, ecc_f, f):
     # We fix the inertial direction at the beginning
     ecc_0 = ss_0.ecc.value
     if ecc_0 > 0.001:  # Arbitrary tolerance
-        ref_vec = ss_0.ecc_vec / ecc_0
+        ref_vec = ss_0.e_vec / ecc_0
     else:
         ref_vec = ss_0.r / norm(ss_0.r)
 
