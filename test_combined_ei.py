@@ -78,5 +78,5 @@ def test_geo_cases_numerical(ecc_0, ecc_f):
                             v * u.km / u.s,
                             s0.epoch + t_f * u.s)
 
-    assert_allclose(sf.ecc.value, ecc_f, atol=1e-3)
+    assert_allclose(sf.ecc.value, ecc_f, rtol=1e-2, atol=1e-2)
     assert_allclose(sf.inc.to(u.rad).value, inc_f, rtol=1e-1)
