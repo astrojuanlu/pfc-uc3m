@@ -13,7 +13,7 @@ from poliastro.twobody.decorators import state_from_vector
 from poliastro.util import norm, circular_velocity
 
 
-def guidance_law(f):
+def guidance_law(ecc_0, ecc_f, f):
     """Guidance law from the model.
 
     Thrust is aligned with an inertially fixed direction perpendicular to the
@@ -21,17 +21,23 @@ def guidance_law(f):
 
     Parameters
     ----------
+    ecc_0 : float
+        Initial eccentricity.
+    ecc_f : float
+        Final eccentricity.
     f : float
         Magnitude of constant acceleration
 
     """
+    delta_alpha = 0.0 if ecc_f - ecc_0 > 0 else np.pi
+
     @state_from_vector
     def a_d(t0, ss):
         r = ss.r.value
         v = ss.v.value
         nu = ss.nu.value
 
-        alpha_ = nu
+        alpha_ = nu + delta_alpha
 
         r_ = r / norm(r)
         w_ = np.cross(r, v) / norm(np.cross(r, v))

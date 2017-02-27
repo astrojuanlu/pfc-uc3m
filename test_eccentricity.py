@@ -1,3 +1,5 @@
+import pytest
+
 from numpy.testing import assert_allclose
 
 from astropy import units as u
@@ -10,10 +12,12 @@ from poliastro.twobody.propagation import cowell
 from eccentricity_quasioptimal import guidance_law, extra_quantities
 
 
-def test_sso_disposal_time_and_delta_v():
+@pytest.mark.parametrize("ecc_0,ecc_f", [
+    [0.0, 0.1245],  # Reverse-engineered from results
+    [0.1245, 0.0]
+])
+def test_sso_disposal_time_and_delta_v(ecc_0, ecc_f):
     a_0 = Earth.R.to(u.km).value + 900  # km
-    ecc_0 = 0.0
-    ecc_f = 0.1245  # Reverse-engineered from results
     f = 2.4e-7  # km / s2, assumed constant
 
     k = Earth.k.decompose([u.km, u.s]).value
@@ -27,15 +31,17 @@ def test_sso_disposal_time_and_delta_v():
     assert_allclose(t_f / 86400, expected_t_f, rtol=1e-4)
 
 
-def test_sso_disposal_numerical():
+@pytest.mark.parametrize("ecc_0,ecc_f", [
+    [0.0, 0.1245],  # Reverse-engineered from results
+    [0.1245, 0.0]
+])
+def test_sso_disposal_numerical(ecc_0, ecc_f):
     a_0 = Earth.R.to(u.km).value + 900  # km
-    ecc_0 = 0.0
-    ecc_f = 0.1245  # Reverse-engineered from results
     f = 2.4e-7  # km / s2, assumed constant
 
     k = Earth.k.decompose([u.km, u.s]).value
 
-    optimal_accel = guidance_law(f)
+    optimal_accel = guidance_law(ecc_0, ecc_f, f)
 
     _, t_f = extra_quantities(k, a_0, ecc_0, ecc_f, f)
 

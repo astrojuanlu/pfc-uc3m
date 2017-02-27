@@ -35,6 +35,7 @@ def guidance_law(ecc_0, ecc_f, inc_0, inc_f, argp, f):
 
     """
     beta_0_ = beta(ecc_0, ecc_f, inc_0, inc_f, argp)
+    delta_alpha = 0.0 if ecc_f - ecc_0 > 0 else np.pi
 
     @state_from_vector
     def a_d(t0, ss):
@@ -42,10 +43,8 @@ def guidance_law(ecc_0, ecc_f, inc_0, inc_f, argp, f):
         v = ss.v.value
         nu = ss.nu.value
 
-        # TODO: The direction must change depending on the sign of Δe
-        alpha_ = nu - np.pi
-        # "The sign of ß reverses at minor axis crossings"
-        beta_ = beta_0_ * np.sign(np.cos(nu))
+        alpha_ = nu + delta_alpha
+        beta_ = beta_0_ * np.sign(np.cos(nu))  # The sign of ß reverses at minor axis crossings
 
         r_ = r / norm(r)
         w_ = np.cross(r, v) / norm(np.cross(r, v))
