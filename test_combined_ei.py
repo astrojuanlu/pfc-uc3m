@@ -53,8 +53,6 @@ def test_geo_cases_numerical(ecc_0, ecc_f):
 
     k = Earth.k.decompose([u.km, u.s]).value
 
-    optimal_accel = guidance_law(ecc_0, ecc_f, inc_0, inc_f, argp, f)
-
     _, _, t_f = extra_quantities(k, a, ecc_0, ecc_f, inc_0, inc_f, argp, f)
 
     # Retrieve r and v from initial orbit
@@ -64,6 +62,8 @@ def test_geo_cases_numerical(ecc_0, ecc_f):
         0 * u.deg, argp * u.deg, 0 * u.deg
     )
     r0, v0 = s0.rv()
+
+    optimal_accel = guidance_law(s0, ecc_f, inc_f, f)
 
     # Propagate orbit
     r, v = cowell(k,
