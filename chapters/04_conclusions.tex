@@ -1,3 +1,16 @@
 \chapter{Conclusions} \label{conclusions}
 
-\clearpage
+\todo[inline]{draft}
+
+\begin{itemize}
+\item There were no validation cases for some guidance laws. BAD.
+\item For others, there were only plots that had to be digitized. BAD.
+\item In these cases and when the numerical cases do not have enough decimal places, it is not possible to assess if the discrepancies are within the acceptable margin of numerical errors or due to something else. BAD.
+\item Implementation details are important, and not always given in the literature. Never found accompanying code. BAD.
+\item It is not enough to check for the cases available in the literature: sometimes singular behavior is not tested and can lead to unexpected delays. From a user experience point of view, one should consider adding guards, use defensive programming techniques, monitor the evolution of the integration or add timeouts.
+\item The choice of orbital elements affects the convergence of the algorithms, and for classical orbital elements in particular the performance of singular orbits is hurt (equatorial, circular or both). Other sets of orbital elements could be explored.
+\item Practical considerations should be taken into account, even in a preliminary design phase. For instance, for the combined semimajor axis and inclination maneuver, if the radius of the orbit increases too much the spacecraft can go through the Van Allen radiation belt, posing a threat to electronic systems \cite{kechichian1997reformulation}. The efficiency of the maneuvers and the possibility of using discontinuous thrust should be explored for further propellant savings.
+\item By decoupling the integration of the equations of motion, the control laws and the computation of the associated quantities our software is easy to reuse and extend.
+\item More work regarding the conversion of reference frames would be desirable.
+\item The use of high-level features, like implicit element conversion and physical unit handling, makes the software easier to use but also has a noticeable effect on performance. Special care has been taken not to place highly dynamical or introspective code inside the evaluation of the perturbation acceleration, such as unit conversion, but there is probably more room for optimizations\footnote{See \url{https://github.com/poliastro/poliastro/pull/140}}.
+\end{itemize}

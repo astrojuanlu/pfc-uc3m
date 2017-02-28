@@ -10,10 +10,44 @@
 
 \subsection{Eccentricity change} \label{sec:resecc}
 
+For the two cases in consideration (the one described in table~\ref{tab:xxx} and the corresponding to a reverse change in eccentricity) we were able to recover the expected results from \cite{pollard1997simplified} with a relative error of $10^{-4}$. This can be regarded as a nice result, given that the actual values were not present in the original paper and had to be computed or interpreted from the plots.
+
+The same relative and absolute errors of $10^{-4}$ are obtained for the expected eccentricity after integrating the equations of motion, either with a positive or a negative change in eccentricity. This validates our intuition of reversing the direction of the thrust depending on the sign of $\Delta e$.
+
 \subsection{Argument of periapsis adjustment}
+
+Yeah.
+
+\clearpage
 
 \section{Non planar maneuvers} \label{sec:resnonplanar}
 
 \subsection{Combined semimajor axis and inclination change} \label{sec:resedelbaum}
 
+For all the evaluated cases we were able to recover the original results of \cite{kechichian1997reformulation}, with a varying degree of accuracy. For both the expected time of flight $t_f$ and cost $\Delta V$, a relative error of $10^{-5}$ was achieved for the first case, $10^{-3}$ for the second and $10^{-2}$ for the singular case. With the figures given in the original paper, we are unable to assess if the loss of accuracy is due to problems in our algorithm or simply the fact that not all decimal places are included in the text. For the sake of completeness, our results to machine precision are summarized in table~\ref{tab:aincanares}.
+
+Regarding the numerical validation, after integrating the equations of motion for a time $t = t_f$ for the two non singular cases we recover the expected values for final semimajor axis $a$ and inclination $i$ with a relative error of $10^{-5}$ for the former and an absolute error of $10^{-3}$ for the latter. Notice that the relative error makes no sense if we are comparing to zero. The eccentricity does not experiment significant growth and stays equal to zero with an absolute tolerance of $10^{-2}$. The results are summarized in table~\ref{tab:aincnumres}.\todo{Include all these tables for each case?}
+
+For completeness, we also include the plots of the time history for the semimajor axis, yaw angle, inclination and velocity for the two non singular cases, using the analytical formulas and recording the evolution during the integration of the equations of motion.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+\begin{table}[b]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+\multirow{2}{*}{} & \multicolumn{3}{l|}{\textbf{Time of flight $t_f$}}   & \multicolumn{3}{l|}{\textbf{Cost $\Delta V$}}      \\ \cline{2-7} 
+                  & Expected    & Computed        & $\varepsilon$       & Expected  & Computed        & $\varepsilon$       \\ \hline
+\textbf{Case 1}   & $191.26295$ & $191.262282913$ & $0.35 \cdot 10^{-5}$ & $5.78378$ & $5.7837714353$  & $0.15 \cdot 10^{-5}$ \\ \hline
+\textbf{Case 2}   & $335.0$     & $335.033933749$ & $0.10 \cdot 10^{-3}$ & $10.13$   & $10.1314261566$ & $0.14 \cdot 10^{-3}$ \\ \hline
+\textbf{Case 3}   & $351.0$     & $351.211665646$ & $0.60 \cdot 10^{-3}$ & $10.61$   & $10.6206407691$ & $0.10 \cdot 10^{-2}$ \\ \hline
+\end{tabular}
+\caption{Analytical results of the combined semimajor axis and inclination change.}
+\label{tab:aincanares}
+\end{table}
+
 \subsection{Combined eccentricity and inclination change}
+
+For each of the data points extracted from the plots in \cite{pollard2000simplified}, we were able to recover the expected values of yaw angle $\beta$ and cost $\Delta V$ with a relative error of $10^{-2}$. This case is even more challenging since the precision of the extracted data is limited by the resolution of the plots, even with the help of an automated software. Again, for improving the accuracy more numerical test cases would be needed.
+
+The results of the integration of the third case ($e_0 = 0.4, i_f = 20.0~\text{deg}$) display similar accuracy: the expected final eccentricity and inclination are recovered with a relative error of $10^{-2}$ and $10^{-1}$ respectively. These tolerances are the worst for all the guidance laws in study, although still acceptable. The reverse change in eccentricity has been studied as well to test the algorithm against an initial circular orbit, yielding the same results.
