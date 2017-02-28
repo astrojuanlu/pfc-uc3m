@@ -1,6 +1,7 @@
 import numpy as np
 from numpy.linalg import norm
 
+from matplotlib import rc
 import matplotlib.pyplot as plt
 
 from astropy import units as u
@@ -54,7 +55,11 @@ def _extract_arrays(t_domain, r_vectors, v_vectors):
 
 
 def _plot_quantities(t_domain, a_values, inc_values, v_values):
-    # TODO: Plotting 70k rows is extremely slow, consider subsampling
+    # http://matplotlib.org/users/pgf.html#custom-preamble
+    # http://sbillaudelle.de/2015/02/23/seamlessly-embedding-matplotlib-output-into-latex.html
+    rc("pgf", rcfonts=False)
+    rc("text", usetex=True)
+
     _, ax_r1 = plt.subplots()
     ax_r1.set_xlabel("Time, days")
 
@@ -82,10 +87,12 @@ def plot_edelbaum_case(inc_0):
 
     t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, inc_0, i_f, f)
     a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
-    _plot_quantities(t_domain, a_values, inc_values, v_values)
-
-    plt.show()
+    # TODO: Plotting 70k rows is extremely slow, consider subsampling
+    axes = _plot_quantities(t_domain, a_values, inc_values, v_values)
+    return axes
 
 
 if __name__ == '__main__':
+    plot_edelbaum_case(np.radians(28.5))
     plot_edelbaum_case(np.radians(90.0))
+    plt.show()

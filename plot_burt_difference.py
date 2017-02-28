@@ -34,6 +34,8 @@ def main():
 
     fig.savefig("burt_difference.pgf")
 
+    return fig, ax
+
 
 if __name__ == '__main__':
     main()
