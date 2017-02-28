@@ -1,3 +1,6 @@
+import os
+from datetime import datetime
+
 import numpy as np
 from numpy.linalg import norm
 
@@ -79,6 +82,17 @@ def _plot_quantities(t_domain, a_values, inc_values, v_values):
     return fig_a, fig_v_inc
 
 
+def _save_data(t_, a_, inc_, v_):
+    dir_name = "edelbaum_{}_{}".format(
+        int(np.degrees(inc_[0])), datetime.now().strftime("%m%d_%H_%M_%S"))
+
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    np.savetxt(os.path.join(dir_name, "data.txt"), np.column_stack([t_, a_, inc_, v_]))
+    return dir_name
+
+
 def plot_edelbaum_case(inc_0):
     a_0 = 7000.0  # km
     a_f = 42166.0  # km
@@ -87,6 +101,10 @@ def plot_edelbaum_case(inc_0):
 
     t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, inc_0, i_f, f)
     a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
+
+    # Please, please, save the data
+    _save_data(t_domain, a_values, inc_values, v_values)
+
     # TODO: Plotting 70k rows is extremely slow, consider subsampling
     figures = _plot_quantities(t_domain, a_values, inc_values, v_values)
     return figures, t_domain, a_values, inc_values, v_values
