@@ -22,16 +22,18 @@ inc_f = 0.0  # rad
 k = Earth.k.decompose([u.km, u.s]).value
 
 
-def test_leo_geo_time_and_delta_v():
-    inc_0 = (28.5 * u.deg).to(u.rad).value  # rad
-
-    expected_t_f = 191.26295  # days
-    expected_delta_V = 5.78378  # km / s
+@pytest.mark.parametrize("inc_0,expected_t_f,expected_delta_V,rtol", [
+    [28.5, 191.26295, 5.78378, 1e-5],
+    [90.0, 335.0, 10.13, 1e-3],  # Extra decimal places added
+    [114.591, 351.0, 10.61, 1e-2]
+])
+def test_leo_geo_time_and_delta_v(inc_0, expected_t_f, expected_delta_V, rtol):
+    inc_0 = np.radians(inc_0)  # rad
 
     delta_V, t_f = extra_quantities(k, a_0, a_f, inc_0, inc_f, f)
 
-    assert_allclose(delta_V, expected_delta_V, rtol=1e-5)
-    assert_allclose(t_f / 86400, expected_t_f, rtol=1e-5)
+    assert_allclose(delta_V, expected_delta_V, rtol=rtol)
+    assert_allclose(t_f / 86400, expected_t_f, rtol=rtol)
 
 
 @pytest.mark.parametrize("inc_0", [np.radians(28.5), np.radians(90.0)])
