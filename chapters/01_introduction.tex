@@ -1,5 +1,5 @@
 \chapter{Introduction} \label{sec:introduction}
-\epigraphhead[50]{\epigraph{%
+\epigraphhead[30]{\epigraph{%
 \textit{"A planet is the cradle of mind, but one cannot live in a cradle forever."}}%
 {\textsc{Konstantin E. Tsiolkovsky (1857 - 1935)}}%
 }
@@ -152,7 +152,7 @@ In some very restricted cases there are also analytical solutions: very low-thru
 
 \subsection{Python} \label{sec:python}
 
-The Python programming language was started by Guido van Rossum in 1989 as a successor to the ABC language, and v1.0 was released in 1994\footnote{http://python-history.blogspot.com.es/2009/01/brief-timeline-of-python.html}. It is therefore not new, and in fact it predates the Java language, first released in 1996. On the other hand, Python first uses for scientific purposes appeared as early as 1995, with the creation of a special interest group on numerical arrays \cite{millman2011python}. However, in recent times the ecosystem has greatly improved, with the application of Open Development principles, the increasing interest and involvement of private companies and the generous funds given to projects like IPython \cite{perez2007ipython} and Jupyter. Nowadays, it is one of the most used languages in fields like Astronomy \cite{momcheva2015software} and small-to-medium Data Science, and heavily trusted for teaching undergraduate Computer Science in top universities \cite{guo2014python}. In figure~\ref{fig:python} we can see a fragment of one of the Bate-Mueller-White algorithm to solve Lambert's problem implemented in Python.
+The Python programming language was started by Guido van Rossum in 1989 as a successor to the ABC language, and v1.0 was released in 1994\footnote{\url{http://python-history.blogspot.com.es/2009/01/brief-timeline-of-python.html}}. It is therefore not new, and in fact it predates the Java language, first released in 1996. On the other hand, Python first uses for scientific purposes appeared as early as 1995, with the creation of a special interest group on numerical arrays \cite{millman2011python}. However, in recent times the ecosystem has greatly improved, with the application of Open Development principles, the increasing interest and involvement of private companies and the generous funds given to projects like IPython \cite{perez2007ipython} and Jupyter. Nowadays, it is one of the most used languages in fields like Astronomy \cite{momcheva2015software} and small-to-medium Data Science, and heavily trusted for teaching undergraduate Computer Science in top universities \cite{guo2014python}. In figure~\ref{fig:python} we can see a fragment of one of the Bate-Mueller-White algorithm to solve Lambert's problem implemented in Python.
 
 \begin{figure}
 \begin{lstinputlisting}[language=Python]{examples/algorithm.txt}
@@ -165,7 +165,7 @@ One of the most important differences between Python and compiled languages like
 
 \subsection{poliastro}
 
-The code developed for this Master thesis is based on \verb|poliastro|, an open source, pure Python library for Astrodynamics and Orbital Mechanics focused on interplanetary applications and released under the MIT license\cite{cano2017poliastro060}. To overcome the limitations mentioned in \ref{sec:python} regarding the performance of the Python programming language, \verb|poliastro| relies on \verb|numba|, an open source library which can infer types for array-oriented and math-heavy Python code and generate optimized machine instructions using the LLVM compiler infrastructure \cite{numba}.
+The code developed for this Master thesis is based on \verb|poliastro|, an open source, pure Python library for Astrodynamics and Orbital Mechanics focused on interplanetary applications and released under the MIT license\cite{cano2017poliastro}. To overcome the limitations mentioned in \ref{sec:python} regarding the performance of the Python programming language, \verb|poliastro| relies on \verb|numba|, an open source library which can infer types for array-oriented and math-heavy Python code and generate optimized machine instructions using the LLVM compiler infrastructure.
 
 numba works by inferring the types of the variables of a Python function and refining them in several stages until it generates assembly code for the desired platform. In figure~\ref{fig:numba} we see a small fragment of the code that implements the Stumpff functions in poliastro along with its so-called Numba Intermediate Representation, which is the first stage of the optimization process.
 

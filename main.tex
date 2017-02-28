@@ -24,6 +24,9 @@
 \usepackage{lscape}  % sideways tables
 \usepackage{epigraph}  % Nice epigraphs
 \usepackage{times}  % Use Times as default serif font
+\usepackage{url}  % For proper URLs especially in footnotes
+\usepackage[bottom]{footmisc}  % Place footnotes at the bottom
+\usepackage{mathabx}  % For astronomical symbols
 
 %% Mathematical commands
 % http://tex.stackexchange.com/q/44545/2488
@@ -32,6 +35,10 @@
 \newcommand{\deriv}[3][]{\ensuremath{\frac{\diff^{#1} #2}{\diff #3^{#1}}}}
 \newcommand{\ta}{\ensuremath{\theta}}  % True Anomaly
 \newcommand{\arglat}{\ensuremath{(\omega + \ta)}}
+\newcommand{\bigO}[1]{\ensuremath{\mathcal{O}\!\left( #1 \right)}}
+\newcommand{\secular}[1]{\ensuremath{\overset{\sim}{#1}}}
+\newcommand{\circvel}[1]{\ensuremath{\sqrt{\frac{\mu}{#1}}}}
+\DeclareMathOperator{\sign}{sign}
 
 %% Other redefinitions
 \newcommand{\celsius}{{\textdegree}C}
@@ -42,8 +49,9 @@
     extendedchars=true,
 }  % Reduce font size in listings
 \setlength{\epigraphrule}{0pt}
-\setlength{\epigraphwidth}{.6\textwidth}
+\setlength{\epigraphwidth}{.55\textwidth}
 \renewcommand{\textflush}{flushepinormal}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 \title{Study of analytical solutions for low-thrust trajectories}
 \author{Juan Luis Cano Rodríguez}
