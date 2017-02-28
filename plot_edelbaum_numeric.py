@@ -60,13 +60,13 @@ def _plot_quantities(t_domain, a_values, inc_values, v_values):
     rc("pgf", rcfonts=False)
     rc("text", usetex=True)
 
-    _, ax_r1 = plt.subplots()
+    fig_a, ax_r1 = plt.subplots()
     ax_r1.set_xlabel("Time, days")
 
     ax_r1.plot(t_domain / 86400, 1e-3 * a_values, color='k', linestyle='dashed')
     ax_r1.set_ylabel("Semimajor axis, km (thousands)")
 
-    _, ax_l2 = plt.subplots()
+    fig_v_inc, ax_l2 = plt.subplots()
     ax_l2.set_xlabel("Time, days")
 
     ax_l2.plot(t_domain / 86400, v_values, color='k', linestyle='solid')
@@ -76,7 +76,7 @@ def _plot_quantities(t_domain, a_values, inc_values, v_values):
     ax_r2.plot(t_domain / 86400, np.degrees(inc_values), color='k', linestyle='solid')
     ax_r2.set_ylabel("Inclination, degrees")
 
-    return ax_r1, ax_l2, ax_r2
+    return fig_a, fig_v_inc
 
 
 def plot_edelbaum_case(inc_0):
@@ -88,11 +88,18 @@ def plot_edelbaum_case(inc_0):
     t_domain, r_vectors, v_vectors = _compute_results_array(a_0, a_f, inc_0, i_f, f)
     a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
     # TODO: Plotting 70k rows is extremely slow, consider subsampling
-    axes = _plot_quantities(t_domain, a_values, inc_values, v_values)
-    return axes, t_domain, a_values, inc_values, v_values
+    figures = _plot_quantities(t_domain, a_values, inc_values, v_values)
+    return figures, t_domain, a_values, inc_values, v_values
 
 
 if __name__ == '__main__':
-    plot_edelbaum_case(np.radians(28.5))
-    plot_edelbaum_case(np.radians(90.0))
+    (fig_28_a, fig_28_v_inc), *_ = plot_edelbaum_case(np.radians(28.5))
+    (fig_90_a, fig_90_v_inc), *_ = plot_edelbaum_case(np.radians(90.0))
+
+    for ext in "png", "pgf":
+        fig_28_a.savefig("edelbaum_28_a.%s" % ext)
+        fig_28_v_inc.savefig("edelbaum_28_v_inc.%s" % ext)
+        fig_90_a.savefig("edelbaum_90_a.%s" % ext)
+        fig_90_v_inc.savefig("edelbaum_90_v_inc.%s" % ext)
+
     plt.show()
