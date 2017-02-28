@@ -76,7 +76,7 @@ def _plot_quantities(t_domain, a_values, inc_values, v_values):
     ax_r2.plot(t_domain / 86400, np.degrees(inc_values), color='k', linestyle='solid')
     ax_r2.set_ylabel("Inclination, degrees")
 
-    return ax_r1, ax_r1, ax_l2, ax_r2
+    return ax_r1, ax_l2, ax_r2
 
 
 def plot_edelbaum_case(inc_0):
@@ -89,7 +89,7 @@ def plot_edelbaum_case(inc_0):
     a_values, inc_values, v_values = _extract_arrays(t_domain, r_vectors, v_vectors)
     # TODO: Plotting 70k rows is extremely slow, consider subsampling
     axes = _plot_quantities(t_domain, a_values, inc_values, v_values)
-    return axes
+    return axes, t_domain, a_values, inc_values, v_values
 
 
 if __name__ == '__main__':
