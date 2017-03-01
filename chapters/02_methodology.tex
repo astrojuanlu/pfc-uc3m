@@ -6,13 +6,29 @@
 
 \section{Cases in study} \label{cases}
 
-For this study we have considered a variety of low-thrust guidance laws that are available in the literature. Due to the scarcity of mathematically tractable examples in the field, we have focused our attention in the ideal case of fixed-thrust maneuvers, which effectively take the variation of mass of the spacecraft out of consideration \cite{battin1999introduction}. Thanks to this assumption, the required time of flight for each maneuver will be:
+For this study we have considered a variety of low-thrust guidance laws that are available in the literature. Due to the scarcity of mathematically tractable examples in the field, we have focused our attention in the ideal case of fixed-acceleration maneuvers, which effectively take the variation of mass of the spacecraft out of consideration \cite{battin1999introduction}. Thanks to this assumption, the required time of flight for each maneuver will be:
+% * <dmorante@ing.uc3m.es> 2017-02-28T21:54:20.980Z:
+% 
+% > fixed-thrust maneuvers
+% yo diría mejor constant acceleration (Esa aceleración puede contar con los efectos del thrust (que no tiene por qué ser constante, más perturbaciones))
+% 
+% ^ <juanlu001@gmail.com> 2017-02-28T22:06:50.102Z:
+%
+% cierto, está mal escrito porque en realidad lo que es constante es la aceleración, no la fuerza
+%
+% ^ <juanlu001@gmail.com> 2017-02-28T22:07:27.365Z.
 
 \[
 t_f = \frac{\Delta V_{\text{total}}}{f}
 \]
 
 where $f$ is the specific thrust, or equivalently the magnitude of the perturbing acceleration.
+% * <dmorante@ing.uc3m.es> 2017-02-28T21:51:47.430Z:
+% 
+% > where $f$ is the specific thrust, or equivalently the magnitude of the perturbing acceleration.
+% Habría que hacer una derivación más formal de esta ecuación
+% 
+% ^.
 
 On the other hand, and again to adhere ourselves to straightforward analytical solutions, we have selected those references that make no assumptions about the natural orbital perturbations and do not take into account real world phenomena like eclipses. However, \cite{kechichian1997reformulation} notes that it is useful to develop suboptimal solutions that are as realistic as possible while retaining the analytic nature, so we might consider them for a future work.
 
@@ -37,6 +53,16 @@ The assumptions for developing each of these guidance laws is explained in the c
 \section{Equations of motion} \label{sec:motion}
 
 To validate the analytical solutions provided by the guidance laws in study, we have compared the results of the computations with a numerical integration of the equations of motion. To accomplish that, we have performed a reduction of order on equation~\ref{eq:twobody}:
+% * <dmorante@ing.uc3m.es> 2017-02-28T21:57:09.237Z:
+% 
+% > To validate the analytical solutions provided by the guidance laws in study, we have compared the results of the computations with a numerical integration of the equations of motion. To accomplish that, we have performed a reduction of order on equation
+% Habría que introducir formalmente que son x,y,z,vx,vy....
+% 
+% ^ <juanlu001@gmail.com> 2017-02-28T22:08:32.533Z:
+%
+% ¿No se ve que son las componentes cartesianas de $\vec{r}$ y $\vec{v}$?
+%
+% ^.
 
 \[
 \vec{u} \longleftarrow \begin{pmatrix} \vec{r} \\ \vec{v} \end{pmatrix} = \begin{pmatrix} x \\ y \\ z \\ v_x \\ v_y \\ v_z \end{pmatrix}
@@ -57,10 +83,26 @@ The validation of each guidance law is always done in two steps: first the analy
 \section{Planar maneuvers} \label{sec:metplanar}
 
 Let us first focus on the planar maneuvers, those that only affect the semimajor axis $a$, eccentricity $e$ and argument of periapsis $\omega$ of the orbit. While some of them can be obtained as particular cases of more complicated guidance laws studied in \ref{sec:metnonplanar}, for the sake of simplicity and clarity of exposition we decided to consider them separately.
+% * <dmorante@ing.uc3m.es> 2017-02-28T22:01:02.430Z:
+% 
+% > planar maneuvers
+% la fuerza de perturbación está contenida en el plano orbital( Estaría bien introducir en algún momento el plano orbital de manera formal)
+% 
+% ^ <juanlu001@gmail.com> 2017-02-28T22:12:58.648Z:
+%
+% en la introducción cuando hablo del problema perturbado puedo introducir la órbita osculante
+%
+% ^.
 
 \subsection{Semimajor axis change} \label{sec:metsma}
 
 In this section we discuss several strategies to perform a transfer between two coplanar, near-circular orbits, and we select the tangential one among the other solutions for practical considerations.
+% * <dmorante@ing.uc3m.es> 2017-02-28T22:02:57.465Z:
+% 
+% >  for practical considerations
+% ???? No me queda claro por qué esta es la razón. ¿Por qué es la forma más óptima?
+% 
+% ^ <dmorante@ing.uc3m.es> 2017-02-28T22:07:44.009Z.
 
 Burt studied the secular changes in the classical orbital elements originated by several thrust programs assuming that the perturbing forces are "sensibly constant over one orbital period" and also "small enough to produce a negligible variation" of each element during that period \cite{burt1967space}. For the semimajor axis in particular, and using results previously obtained by King-Hele, he considers two guidance laws: applying thrust in a direction that is within the orbital plane and perpendicular to the radius vector ($f_{\ta}$) and along the direction of the velocity ($f_T$). The increment of semimajor axis $a$ for each of them is:
 
@@ -90,7 +132,17 @@ For $a_f < 4 a_0$ the secular increase in semimajor axis is greater for $f_T$, w
   \label{fig:burtdiff}
 \end{figure}
 
-In the absence of numerical example to validate these strategies, we opted to focus on the near-circular case, where the change in eccentricity is only beneficial and the difference between tangential and perpendicular is negligible. This is the starting point of Edelbaum's original analysis, where he already noticed that the tangential program is not necessarily optimal, in agreement with the results of Burt. Quoting \cite{edelbaum1961propulsion}:
+In the absence of numerical example to validate these strategies, we opted to focus on the near-circular case, where the eccentricity will remain essentially the same when enlarging the orbit and the difference between tangential and perpendicular is negligible. This is the starting point of Edelbaum's original analysis, where he already noticed that the tangential program is not necessarily optimal, in agreement with the results of Burt. Quoting \cite{edelbaum1961propulsion}:
+% * <dmorante@ing.uc3m.es> 2017-02-28T22:06:54.089Z:
+% 
+% >  where the change in eccentricity is only beneficial 
+% WHY?
+% 
+% ^ <juanlu001@gmail.com> 2017-02-28T22:10:37.585Z:
+%
+% aclarado
+%
+% ^ <juanlu001@gmail.com> 2017-02-28T22:10:56.080Z.
 
 \begin{displayquote}
 It is demonstrated in (17) [Lawden 1958, AN] that the optimum thrust direction for escape with low thrust is halfway between the tangent to the orbit and the normal to the radius vector. This result is also largely applicable to transfer between circular orbits. For the purposes of this report, the difference between this program and tangential thrust can be considered negligible.
@@ -104,7 +156,7 @@ The required $\Delta V$ will be:
 \Delta V = \left| V_0 - V_f \right| = \left| \circvel{a_0} - \circvel{a_f} \right|
 \]
 
-and the required time of flight $t_f = \Delta V / f$ as explained at the beginning of the chapter.
+and the required time of flight $t_f = \Delta V / f$ as explained at the beginning of the chapter. As we were unable to find satisfactory validation examples for this otherwise simple case, it will be treated jointly with the combined semimajor axis and inclination transfer.
 
 \subsection{Eccentricity change} \label{sec:metecc}
 

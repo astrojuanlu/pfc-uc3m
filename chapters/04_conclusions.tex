@@ -1,16 +1,39 @@
 \chapter{Conclusions} \label{conclusions}
 
-\todo[inline]{draft}
+Here we summarize the main conclusion of this work and propose some ideas for possible improvements and future areas of work. Regarding the collection of validation data and the survey of scientific articles related to analytical solutions of continuous thrust orbits, our main findings are:
 
 \begin{itemize}
-\item There were no validation cases for some guidance laws. BAD.
-\item For others, there were only plots that had to be digitized. BAD.
-\item In these cases and when the numerical cases do not have enough decimal places, it is not possible to assess if the discrepancies are within the acceptable margin of numerical errors or due to something else. BAD.
-\item Implementation details are important, and not always given in the literature. Never found accompanying code. BAD.
-\item It is not enough to check for the cases available in the literature: sometimes singular behavior is not tested and can lead to unexpected delays. From a user experience point of view, one should consider adding guards, use defensive programming techniques, monitor the evolution of the integration or add timeouts.
-\item The choice of orbital elements affects the convergence of the algorithms, and for classical orbital elements in particular the performance of singular orbits is hurt (equatorial, circular or both). Other sets of orbital elements could be explored.
-\item Practical considerations should be taken into account, even in a preliminary design phase. For instance, for the combined semimajor axis and inclination maneuver, if the radius of the orbit increases too much the spacecraft can go through the Van Allen radiation belt, posing a threat to electronic systems \cite{kechichian1997reformulation}. The efficiency of the maneuvers and the possibility of using discontinuous thrust should be explored for further propellant savings.
+\item We could not find validation cases for some of the guidance laws. While it is definitely useful to have steering programs available, along with detailed mathematical derivations and the corresponding explanations, it is desirable to count also with accompanying numerical examples to improve the reproducibility of the results. Otherwise it is not possible to confirm whether potential software implementations are correct or not.
+%
+\item For other articles in the literature, the numerical examples where presented in the form of plots and charts. Although having some form of graphical representation is better than nothing, accurately extracting data points from charts is extremely difficult and the attainable precision is limited by factors like the quality and resolution of the image.
+%
+\item Even when there are some numerical applications of the proposed guidance laws, often the results do not have enough decimal places to clearly determine if the discrepancies are due to natural floating point arithmetic problems or implementation issues.
+\end{itemize}
+
+For all these reasons, we therefore recommend to include tables, appendices or companion software that supports the theoretical work presented in the paper. We have done so by uploading all the supporting software online, and also the scripts that were used to generate the plots and charts wherever they were relevant.
+
+Regarding the process of implementing those steering programs in software:
+
+\begin{itemize}
+\item Implementation details are important, and not always given in the literature. Sometimes some equation or formula is perfectly defined from a mathematical point of view, but can present ill-defined behavior that is easily avoidable by rewriting some terms or using a different algorithm.
+%
+\item While validating the guidance laws we occasionally found that it is not enough to check for the cases available in the literature. Sometimes singular behavior or corner cases are not tested and can lead to unexpected behavior. From a user experience point of view, one should consider adding guards, use defensive programming techniques, monitor the evolution of the integration or add timeouts.
+\end{itemize}
+
+From a user experience point of view, thinking about the potential users of the software:
+
+\begin{itemize}
 \item By decoupling the integration of the equations of motion, the control laws and the computation of the associated quantities our software is easy to reuse and extend.
-\item More work regarding the conversion of reference frames would be desirable.
+\item More work regarding the conversion of reference frames would be desirable, since it is too low-level now and prone to error. Incorporating velocities into Astropy reference frames for proper transformation is already on the roadmap\footnote{See \url{https://github.com/astropy/astropy/issues/4344}}.
 \item The use of high-level features, like implicit element conversion and physical unit handling, makes the software easier to use but also has a noticeable effect on performance. Special care has been taken not to place highly dynamical or introspective code inside the evaluation of the perturbation acceleration, such as unit conversion, but there is probably more room for optimizations\footnote{See \url{https://github.com/poliastro/poliastro/pull/140}}.
+\end{itemize}
+
+And lastly, regarding the aspects more related to the mathematics that support the theoretical aspects of orbital mechanics in general and continuous thrust trajectories in particular:
+
+\begin{itemize}
+\item Focusing on analytical solutions, while arguably harder and of less immediate applicability, can be a powerful tool to gain insight about the physical phenomena under study. The evolution of velocity and inclination for the combined semimajor axis and inclination transfer or the periodic numerical noise that appears when comparing the result of the integration of the equations of motion with the analytical evolution of the elements are good examples. However, the current trend in looking for analytical solutions involves the use of Hamiltonian mechanics, calculus of variations and complicated transformations \cite{da2016optimal}.
+%
+\item The choice of orbital elements affects the convergence of the algorithms, and for classical orbital elements in particular the performance of singular orbits is hurt (equatorial, circular or both). In these cases the advantages of using formulations such as the variation of parameters are lost, since the variation of some elements within one orbital revolution are no longer small and can even lead to high numerical errors. Other sets of orbital elements could be explored, particularly equinoctial elements or DROMO elements \cite{plaez2006dromo}.
+%
+\item Practical considerations should be taken into account, even in a preliminary design phase. For instance, for the combined semimajor axis and inclination maneuver, if the radius of the orbit increases too much the spacecraft can go through the Van Allen radiation belt, posing a threat to electronic systems \cite{kechichian1997reformulation}. Another practical consideration that could be taken into account would be studying the efficiency efficiency of the maneuvers and the possibility of using discontinuous thrust for further propellant savings \cite{petropoulos2003simple}. Lastly, accounting for the periods of shadow and various eclipses can be of special importance if the spacecraft is solar-powered \cite{kechichian1997reformulation}.
 \end{itemize}
