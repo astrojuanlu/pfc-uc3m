@@ -190,12 +190,16 @@ There are many forms of the Gauss planetary equations, depending on the element 
 \deriv{M}{t} & = n + \frac{b}{ahe} \left( \left( p \cos{\ta} - 2 re \right) f_r - \left( p + r \right) \sin{\ta} f_{\ta} \right) \\
 \end{align}
 
-Where $a$ is the semimajor axis, $e$ the eccentricity, $i$ the inclination, $\Omega$ the right ascension of the ascending node, $\omega$ the argument of periapsis, $\ta$ the true anomaly and $M$ the mean anomaly. The three components of the disturbing force are mutually orthogonal: $f_r$ points outwards along the position vector, $f_h$ is perpendicular to the plane of the orbit and $f_{\ta}$ completes the trihedron.
+Where $a$ is the semimajor axis, $e$ the eccentricity, $i$ the inclination, $\Omega$ the right ascension of the ascending node, $\omega$ the argument of periapsis, $\ta$ the true anomaly, $M$ the mean anomaly, $\arglat = \omega + \ta$ the argument of latitude, $r$ the distance to the center of mass of the attractor (or equivalently, the modulus of the position vector $r = |\vec{r}|$, $p = a (1 - e^2)$ the \textit{semilatus rectum} and $h$ the specific angular momentum. The three components of the disturbing force are mutually orthogonal: $f_r$ points outwards along the position vector, $f_h$ is perpendicular to the plane of the orbit and $f_{\ta}$ completes the trihedron.
 % * <dmorante@ing.uc3m.es> 2017-02-28T21:58:31.483Z:
 % 
 % Te faltan por definir elementos, como r (distancia al centra body), h,p...etc
 % 
-% ^.
+% ^ <juanlu001@gmail.com> 2017-03-01T03:09:59.378Z:
+%
+% hecho
+%
+% ^ <juanlu001@gmail.com> 2017-03-01T03:10:01.196Z.
 % * <dmorante@ing.uc3m.es> 2017-02-28T20:25:42.495Z:
 % 
 % > disturbing force
@@ -238,7 +242,9 @@ The need to optimize the trajectory of a spacecraft comes from the stringent mas
 % 
 % ^ <juanlu001@gmail.com> 2017-02-28T22:02:47.823Z.
 
-In any case, apart from this cases of parametric optimization, the use of continuous thrust devices imposes the need of modeling and determining the full time history of the thrust magnitude and direction, effectively becoming an optimal control problem \cite{conway2010spacecraft}. There are several numerical optimization methods for solving these kind of problems, generally divided into two families:
+In any case, apart from this cases of parametric optimization, the use of continuous thrust devices imposes the need of modeling and determining the full time history of the thrust magnitude and direction, effectively becoming an optimal control problem \cite{conway2010spacecraft}. These optimization problems are particularly difficult for several reasons: the concurrence of short period and very long period phenomena, the indetermination of the terminal conditions or even the structure of the problem itself (which might be subject to optimization) and the presence of discontinuities as perfectly valid trajectories (namely impulsive $\Delta V$ changes) are some of them.
+
+There are several numerical optimization methods for solving these kind of problems, generally divided into two families:
 % * <dmorante@ing.uc3m.es> 2017-02-28T20:56:50.850Z:
 % 
 % Comentaría los problemas de optimizar la trayectoria low-thrust
@@ -247,9 +253,13 @@ In any case, apart from this cases of parametric optimization, the use of contin
 % --> Operational constraints
 % --> ....
 % 
+% ^ <juanlu001@gmail.com> 2017-03-01T04:02:20.733Z:
+%
+% de manera un poco superficial, pero hecho
+%
 % ^.
 
-\todo[inline]{Expand everything after this TODO. Methods better explained in \cite{conway2010spacecraft} and \cite{betts1998survey}.}
+
 % * <dmorante@ing.uc3m.es> 2017-02-28T20:47:39.788Z:
 % 
 % Esta referencia también está bien --> Anil V Rao. A survey of numerical methods for optimal control. Advances in the Astronautical Sciences, 135(1):497?528, 2009.
@@ -259,11 +269,12 @@ In any case, apart from this cases of parametric optimization, the use of contin
 % 
 % ¡¡¡ Los nombres está cambiados!!!!
 % 
+% ^ <juanlu001@gmail.com> 2017-03-01T03:56:24.019Z:
+%
+% ups, arreglado
+%
 % ^.
-\textbf{Direct Method}
-Solve the Two-point Boundary-value Problem.
-Advantage: the solution is smooth and accurate
-Disadvantage: Difficult to converge, Difficult to give a reasonable initial guess, small radius of convergence 
+\textbf{Indirect methods} usually make use of the analytical necessary conditions from the calculus of variations to form a two-point boundary-value problem associated with the equations of motion \ref{eq:twobody}. Their advantage is that the obtained solution is smooth and accurate, but on the other hand they tend to get stuck in local optimum and it is therefore difficult to give a reasonable initial guess. 
 % * <dmorante@ing.uc3m.es> 2017-02-28T20:53:23.908Z:
 % 
 % >  Difficult to give a reasonable initial guesse
@@ -272,21 +283,17 @@ Disadvantage: Difficult to converge, Difficult to give a reasonable initial gues
 % 
 % ^ <juanlu001@gmail.com> 2017-02-28T22:03:40.306Z.
 
-\textbf{Indirect Method}
-Transform the optimal control problem into parameter 
-optimization by discretization.
-Advantage: Easy to converge than indirect method, some other optimization parameters can be added
+\textbf{Direct methods}, on the other hand, transform the optimal control problem into a parameter optimization problem by discretization. There are many different kinds of direct solution methods, depending on what degree of parametrization is chosen. Although some smoothness properties of the solution are lost in the discretization, they converge more easily than indirect methods and are more flexible and robust in the face of problem modifications or changes in the formulation. The great majority of optimal space trajectories are nowadays determined by direct methods \cite{conway2010spacecraft}.
 % * <dmorante@ing.uc3m.es> 2017-02-28T21:04:28.610Z:
 % 
 % > some other optimization parameters can be added
 % En el método indirecto también puedes añadir 'otros parámetros'. Pero no de forma tan sencilla como con los métodos directos.  Los métodos directos son más 'flexibles' de cara a reformulaciones o modificaciones del problema
 % 
-% ^.
-Disadvantage: Time consuming, the solution is not smooth 
+% ^. 
 
 There exist also \textit{hybrid methods} that combine the previous two and try to bring the advantages of both of them.
 
-In some very restricted cases there are also analytical solutions: very low-thrust, circular orbits. \cite{lawden1963optimal} says that analytical solutions are nice because we gain a real understanding of the problem and help us being effective in using numerical techniques. This is the scope of this work, as will be explained in \ref{sec:contribution}.
+In some very restricted cases there are analytical solutions of the problem. They usually make use of very strong restrictions, such as fixing the acceleration instead of the thrust \cite{battin1999introduction} or restricting to: very low-thrust transfers between circular orbits. Even though they are of very narrow applicability and difficult to develop, analytical solutions are always less expensive in terms of computation power and provide unique physical insight on the problem under study \cite{lawden1963optimal}. It is within this context where we propose collecting several of these analytical solutions, implementing them in software and publishing them in the open, as will be explained in \ref{sec:contribution}.
 % * <dmorante@ing.uc3m.es> 2017-02-28T21:09:01.282Z:
 % 
 % >  help us being effective in using numerical techniques
@@ -303,11 +310,21 @@ In some very restricted cases there are also analytical solutions: very low-thru
 % 
 % Comentar que son ??
 % 
-% ^.
+% ^ <juanlu001@gmail.com> 2017-03-01T03:25:53.536Z:
+%
+% marchando
+%
+% ^ <juanlu001@gmail.com> 2017-03-01T03:25:55.573Z.
+
+There are several software packages devoted to orbital mission analysis, flight control, orbital optimization and other topics related to Astrodynamics and Space Operations. While it is not our intention to make an exhaustive list, we would like to mention two open source alternatives that are in use nowadays and that might overlap in some way with our own solution.
+
 \begin{itemize}
-\item Orekit https://www.orekit.org/static/apidocs/org/orekit/forces/maneuvers/ConstantThrustManeuver.html
-\item GMAT 
+\item \verb|Orekit| is a space dynamics library written in Java that aims at providing accurate and efficient low level components for the development of flight dynamics applications. It is developed by an international community led and sponsored by CS Systèmes d'Information. Although it does not have complex continuous thrust maneuvers build in, it features the necessary building blocks to program them\footnote{See \url{https://www.orekit.org/static/apidocs/org/orekit/forces/maneuvers/ConstantThrustManeuver.html}}.
+%
+\item \verb|GMAT| is an open-source space mission analysis tool designed to model, optimize, and estimate spacecraft trajectories in flight regimes ranging from low Earth orbit to lunar applications, interplanetary trajectories, and other deep space missions. While Orekit target audience is mostly developers, GMAT is more appropriate for the end user. It is developed in the open by NASA.
 \end{itemize}
+
+We now comment how we have used the Python programming language to develop our own solution from scratch and its advantages and drawbacks.
 
 \subsection{Python} \label{sec:python}
 
@@ -341,7 +358,7 @@ Numba works by inferring the types of the variables of a Python function and ref
 \label{fig:numba}
 \end{figure}
 
-In \cite{cano2016icatt} detailed benchmarks were conducted to compare the performance of core Astrodynamics algorithms written in Python as featured in \verb|poliastro| and in Fortran. The tests were performed in a virtualized CentOS machine to avoid interferences from the outside world and provide homogeneous results. The results are summarized in table~\ref{table:results}.
+In \cite{cano2016icatt} detailed benchmarks were conducted to compare the performance of core Astrodynamics algorithms written in Python as featured in \verb|poliastro| and in Fortran, measuring the number of solutions computed per unit time. The tests were performed in a virtualized CentOS machine to avoid interferences from the outside world and provide homogeneous results. The results are summarized in table~\ref{table:results}.
 
 \begin{table*}
     \centering
@@ -353,20 +370,16 @@ In \cite{cano2016icatt} detailed benchmarks were conducted to compare the perfor
         \textbf{poliastro}, numba & 197610.9 & 206153.2 & 203615.8 & \textbf{0.327} & 3296.5 \\ 
         \textbf{poliastro}, pure Python & 3502.7 & 3703.0 & 3639.6 & \textbf{0.006} & 65.6 \\ 
     \end{tabular}
-    \caption{Benchmarking results}
+    \caption{Benchmarking results: solutions per unit time (higher is better).}
     \label{table:results}
 \end{table*}
 
-On the other hand, \verb|poliastro| relies on well-tested, community-backed libraries for low level astronomical tasks, such as Astropy\cite{robitaille2013astropy} and jplephem. Astropy provides several utilities for handling astronomical times and performing reference frame conversions and also allows the user to introduce quantities directly with its physical units, improving the usability of the API \todo{explain what API is somewhere} and reducing the probability of unit errors. jplephem, on the other hand, presents a Python layer to interact with the JPL ephemeris files to compute the position and velocities of the celestial bodies with high precision.
+On the other hand, \verb|poliastro| relies on well-tested, community-backed libraries for low level astronomical tasks, such as Astropy\cite{robitaille2013astropy} and jplephem. Astropy provides several utilities for handling astronomical times and performing reference frame conversions and also allows the user to introduce quantities directly with its physical units, improving the usability of the software and reducing the probability of unit errors. jplephem, on the other hand, presents a Python layer to interact with the JPL ephemeris files to compute the position and velocities of the celestial bodies with high precision.
 
 \section{Contribution of this Master thesis} \label{sec:contribution}
 
-\todo[inline]{translate, complete}
+While in theory one can always resort to numerical methods to solve orbital optimization problems, in practice having analytical solutions is highly valuable: not only they are usually quicker to compute and can be used as initial guesses for iterative algorithms with small radius of convergence, but also they serve as a vehicle to understand the nature of the problem and unveil physical relations that can be lost in numerical solutions. Anyhow, analytical solutions are very difficult to find in general, and very few examples of mathematically tractable cases exist \cite{battin1999introduction}.
 
-Si bien en teoría siempre se pueden utilizar métodos numéricos para simular estas trayectorias, en la práctica disponer de soluciones analíticas resulta conveniente para proporcionar una primera solución a algoritmos iterativos, formular problemas de optimización de forma más sencilla o para validación y verificación. Dichas soluciones analíticas son difíciles de encontrar, pero se han desarrollado para varios casos particulares (véase [Di Carlo, 2016] para un resumen de ellos).
+On the other hand, although there are some existing or ongoing projects that already implement one or more of these algorithms (see for instance \cite{dicarlo2016camelot}, which presents a MATLAB optimization package)  we have been unable to find open source implementations. Aside the philosophical implications of free software, it would be desirable to have a working implementation of these steering programs openly available, royalty-free and easy to obtain which can be then audited by a wide majority of researchers and not those in possession of a specific software license. The main object of this work is to produce such software (see appendix~\ref{sec:software} for installation instructions).
 
-Por otra parte, aunque existen algunos desarrollos que implementan uno o varios de estos algoritmos (de nuevo [Di Carlo, 2016] presenta un paquete de optimización escrito en MATLAB), no hemos podido encontrar programas disponibles bajo licencias libres. Al margen de las implicaciones éticas del software libre, sería deseable contar con una versión de estas soluciones reutilizable, fácil de obtener y directamente auditable por una audiencia amplia, con el objetivo de remediar posibles fallos y aumentar la calidad del código.
-
-Por último, nuestras leyes de guiado están acompañadas de casos de validación disponibles en la literatura, con el objetivo de dejar constancia, por una parte, del margen de error entre nuestra implementación y los artículos consultados, y por otro servir de guía para que desarrollos futuros mantengan o mejoren dicho margen de error.
-
-\clearpage
+Lastly, each of the guidance laws considered for study are validated against numerical examples available in the literature, with the objective of explicitly stating the margin of error between our software and the used references, and on the other hand serve as inspiration or starting point for future research projects that want to include other guidance laws or improve the existing ones.

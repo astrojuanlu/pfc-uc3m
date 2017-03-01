@@ -16,9 +16,9 @@ The same relative and absolute errors of $10^{-4}$ are obtained for the expected
 
 \subsection{Argument of periapsis adjustment}
 
-Yeah.
+For the only validation example studied in this case, we were able to match the results in \cite{ruggiero2011low} within a relative tolerance of $10^{-2}$. We observe a moderate accuracy in this case due to the fact that the time of flight given by the original paper is approximate and because of the intermediate computations needed to obtain the orbital parameters of the GTO orbit from the information given in the Soyuz User Manual. On the other hand, we did not find any validation example that did take into account the natural apsidal rotation of the orbit, so we openly question the applicability of this example. In any case, the function as it is implemented now, albeit not validated, accepts a precomputed value of $\dot{\omega}$.
 
-\clearpage
+Regarding the integration of the trajectory we obtained better results and managed to approximate the final argument of periapsis with a relative error of $10^{-4}$.
 
 \section{Non planar maneuvers} \label{sec:resnonplanar}
 
