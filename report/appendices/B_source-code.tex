@@ -1,0 +1,62 @@
+\chapter{Source code} \label{sec:software}
+
+The source code corresponding to the implementation of all the guidance laws studied in this work, as well as the corresponding test cases for the analytical and numerical validation, some ancillary scripts to produce several tables and plots of this report and the sources of the report itself are all available as an online repository at this URL:
+
+\vspace{0.5cm}
+\url{https://github.com/Juanlu001/pfc-uc3m/}
+\vspace{0.5cm}
+
+The software has been released under the MIT license, a permissive license that allows remixing and commercial use subject to some simple requirements. The complete text is copied at the end of this appendix.
+
+The code is written with reproducibility in mind and it should be easy to install a Python development environment and run the code. These are the required steps to do so using Continuum Analytics Anaconda distribution:
+
+\begin{enumerate}
+\item Install Anaconda Python 3.6 from \url{https://www.continuum.io/downloads}.
+
+\item Download latest development version of the project from \url{https://github.com/Juanlu001/pfc-uc3m/archive/master.zip}
+
+\item Create a virtual environment:
+
+\begin{verbatim}
+$ cd pfc-uc3m
+$ conda env create  # Will read environment.yml
+$ source activate pfc36
+(pfc36) $
+\end{verbatim}
+
+\item Run tests
+
+\begin{verbatim}
+(pfc36) $ cd pfc-uc3m
+(pfc36) $ pytest -vvv
+\end{verbatim}
+
+\end{enumerate}
+
+\clearpage
+
+\begin{scriptsize}
+\begin{verbatim}
+The MIT License (MIT)
+
+Copyright (c) 2016-2017 Juan Luis Cano Rodríguez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+\end{verbatim}
+\end{scriptsize}

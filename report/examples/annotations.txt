@@ -1,0 +1,9 @@
+# --- LINE 29 --- 
+#   $103.3 = unary(fn=-, value=psi)  :: float64
+#   $103.4 = global(gamma: <built-in function gamma>)  :: [...]
+#   $const103.5 = const(int, 5)  :: int64
+#   $103.6 = call $103.4($const103.5)  :: (int64,) -> float64
+#   $103.7 = $103.3 / $103.6  :: float64
+#   delta = $103.7  :: float64
+
+delta = (-psi) / gamma(2 + 2 + 1)
